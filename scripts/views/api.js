@@ -47,5 +47,5 @@ function yicai_heima(req, res) {
 }
 
 module.exports = {
-  yicai_heima: yicai_heima
+  yicai_heima: yicai_heima,
 };

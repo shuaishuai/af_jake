@@ -1,5 +1,6 @@
-var basic = require('./views/basic');
-var api = require('./views/api');
+var basic = require('./views/basic'),
+    api = require('./views/api'),
+    cron = require('./views/cron');
 
 function init(app) {
   // basic
@@ -8,6 +9,9 @@ function init(app) {
 
   // api
   app.get("/api/yicai/heima", api.yicai_heima);
+
+  // cron
+  app.get("/cron/eastmoney/report/content", cron.eastmoney_report_content);
 
   // error handling
   app.use(function(req, res, next){

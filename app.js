@@ -21,7 +21,7 @@ app.use(express.session({
   key: salt.session_key,
   store: sessionStore
 }));
-// app.use(express.logger());
+app.use(express.logger());
 // app.use(express.bodyParser());
 
 // Server

@@ -5,16 +5,11 @@ function index(req, res) {
 var cheerio = require('cheerio');
 
 function hello(req, res) {
-  var $ = cheerio.load('<h2 id="title">Hello world</h2>');
+  console.log(process.env['VCAP_SERVICES']);
+  console.log(process.env['VCAP_SERVICES']['mysql-5.1']);
+  console.log(process.env['VCAP_SERVICES']['mysql-5.1'][0]);
 
-  var $h = $('h2');
-
-  var text = [
-    "id: ", $h.attr('id'), "<br/>",
-    "text: ", $h.text()
-  ].join("");
-
-  res.send(text);
+  res.send('hello');
 }
 
 module.exports = {
