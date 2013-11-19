@@ -1,6 +1,7 @@
 var basic = require('./views/basic'),
     api = require('./views/api'),
-    cron = require('./views/cron');
+    cron = require('./views/cron'),
+    feed = require('./views/feed');
 
 function init(app) {
   // basic
@@ -12,6 +13,9 @@ function init(app) {
 
   // cron
   app.get("/cron/eastmoney/report/content", cron.eastmoney_report_content);
+
+  // atom
+  app.get("/feed/reports", feed.reports);
 
   // error handling
   app.use(function(req, res, next){

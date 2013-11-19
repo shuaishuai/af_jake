@@ -1,5 +1,5 @@
 function index(req, res) {
-  res.render('index.ejs');
+  res.render('index.dust');
 }
 
 var cheerio = require('cheerio');

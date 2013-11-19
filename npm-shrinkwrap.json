@@ -103,9 +103,6 @@
         }
       }
     },
-    "ejs": {
-      "version": "0.8.4"
-    },
     "iconv": {
       "version": "2.0.7"
     },
@@ -254,6 +251,12 @@
     },
     "moment": {
       "version": "2.1.0"
+    },
+    "consolidate": {
+      "version": "0.9.1"
+    },
+    "dustjs-linkedin": {
+      "version": "2.2.0"
     }
   }
 }

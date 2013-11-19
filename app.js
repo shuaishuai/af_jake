@@ -4,9 +4,13 @@ var app = express();
 var salt = require('./scripts/config/salt');
 var env = require('./scripts/config/env');
 
-// template engine
-app.set("views", __dirname + "/templates");
-app.set('view engine', 'ejs');
+// ** to use dustjs-linkedin
+// https://github.com/chovy/express-template-demo/blob/master/demo/app.js
+var dust = require('dustjs-linkedin'),
+    cons = require('consolidate');
+app.engine('dust', cons.dust);
+app.set('view engine', 'dust');
+app.set('views', __dirname + '/templates');
 
 // static folder
 app.use(express.static(__dirname + '/public'));
