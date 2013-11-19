@@ -19,11 +19,11 @@ function init(app) {
 
   // error handling
   app.use(function(req, res, next){
-    res.status(404).render("errors/404.ejs");
+    res.status(404).render("errors/404.dust");
   });
 
   app.use(function(err, req, res, next){
-    res.status(500).render("errors/500.ejs", { err: err.stack });
+    res.status(500).render("errors/500.dust", { err: err.stack });
   });
 }
 

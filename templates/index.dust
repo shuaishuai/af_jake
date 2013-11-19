@@ -10,6 +10,8 @@
       Hello, I'm Jake-the-Spider!
     </h1>
 
+    {@code_formater code=2 /}
+
     <footer>
       <hr>
       2013 &copy; <a href="https://shuaishuai.github.io">shuaishuai</a>

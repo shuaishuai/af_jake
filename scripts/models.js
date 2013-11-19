@@ -12,6 +12,8 @@ var Report = sequelize.define('Report', {
   content: Sequelize.TEXT,
   flag: Sequelize.INTEGER,
 }, { timestamps: false, tableName: 'report' });
+// ** always order by `id`, `created` is not reliable
+
 
 module.exports = {
   Report: Report

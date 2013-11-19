@@ -3,9 +3,12 @@ var moment = require('moment');
 var models = require('../models'),
     Report = models.Report;
 
+// http://www.ietf.org/rfc/rfc4287.txt
 function reports(req, res) {
   var query = {
-    limit: 50
+    where: { content: { ne: 'EMPTY'} },
+    order: 'id DESC',
+    limit: 50,
   };
 
   Report.findAll(query).success(function (reports) {

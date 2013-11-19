@@ -12,7 +12,7 @@
  <category term="stock"/>
  {#reports}
  <entry>
-  <title>{code}, {name}, {title}</title>
+  <title>{@code_formater code=code}{/code_formater}, {name}, {title}</title>
   <link rel="alternate" href="{url}"/>
   <id>{url}</id>
   <updated>{created}</updated>
