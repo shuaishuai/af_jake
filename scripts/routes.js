@@ -13,6 +13,7 @@ function init(app) {
 
   // cron
   app.get("/cron/eastmoney/report/content", cron.eastmoney_report_content);
+  app.get("/cron/parttime/ganji", cron.parttime_ganji);
 
   // atom
   app.get("/feed/reports", feed.reports);
