@@ -1,7 +1,9 @@
+// http://sequelizejs.com/documentation#models-data-types
 var Sequelize = require("sequelize"),
     sequelize = require('./config/mysql').sequelize;
 
-// http://sequelizejs.com/documentation#models-data-types
+
+// ** always order by `id`, `created` is not reliable
 var Report = sequelize.define('Report', {
   id: Sequelize.INTEGER,
   created: Sequelize.DATE,
@@ -12,9 +14,17 @@ var Report = sequelize.define('Report', {
   content: Sequelize.TEXT,
   flag: Sequelize.INTEGER,
 }, { timestamps: false, tableName: 'report' });
-// ** always order by `id`, `created` is not reliable
+
+
+var KV = sequelize.define('KV', {
+  id: Sequelize.INTEGER,
+  updated: Sequelize.DATE,
+  key: Sequelize.STRING(63), // The column name 'key' is a MySQL reserved keyword
+  value: Sequelize.STRING(255),
+}, { timestamps: false, tableName: 'kv' });
 
 
 module.exports = {
-  Report: Report
+  Report: Report,
+  KV: KV,
 };
