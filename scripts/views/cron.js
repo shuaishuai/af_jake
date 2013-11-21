@@ -3,6 +3,8 @@ var _ = require('lodash'),
     $ = require('cheerio'),
     request = require('request');
 
+var winston = require('../logger');
+
 var models = require('../models'),
     Report = models.Report;
 
@@ -62,8 +64,9 @@ function eastmoney_report_content (req, res) {
 
             report.created = created;
             report.content = content;
+            var _logentry = '/cron/eastmoney/report/content: ' + report.id + " " + req.get('user-agent');
             report.save().success(function () {
-              console.log('/cron/eastmoney/report/content: ' + req.get('host') + ': ' + req.get('user-agent'));
+              winston.info(_logentry);
               _send(res, _sendType.SUCCESS);
             });
           }

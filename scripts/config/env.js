@@ -14,7 +14,10 @@ if (!IS_LOCAL) {
   ].join('');
 }
 
+var _logentries_token = IS_LOCAL ? "" : process.env["LOGENTRIES_TOKEN"];
+
 module.exports = {
+  logentries_token: _logentries_token,
   app_port: _app_port,
   mysql_config: _mysql_config,
 };

@@ -12,6 +12,8 @@
     "mysql": "~2.0.0-alpha9",
     "moment": "~2.1.0",
     "consolidate": "~0.9.1",
-    "dustjs-linkedin": "~2.2.0"
+    "dustjs-linkedin": "~2.2.0",
+    "winston": "~0.7.2",
+    "node-logentries": "~0.1.2"
   }
 }
