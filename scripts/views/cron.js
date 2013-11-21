@@ -45,7 +45,7 @@ function eastmoney_report_content (req, res) {
 
         if (!e && r.statusCode === 200 && html != "error converting") {
           var $html = $(html);
-          var errText = $(".errText");
+          var errText = $html.find(".errText");
 
           if (errText.length > 0) {
             report.destroy().success(function () {
@@ -63,6 +63,7 @@ function eastmoney_report_content (req, res) {
             report.created = created;
             report.content = content;
             report.save().success(function () {
+              console.log('/cron/eastmoney/report/content: ' + req.get('host') + ': ' + req.get('user-agent'));
               _send(res, _sendType.SUCCESS);
             });
           }
