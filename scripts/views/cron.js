@@ -16,7 +16,7 @@ function _converter(body) {
     var buf = ic_gb2312_to_utf8.convert(body);
     return buf.toString('utf-8');
   } catch (e) {
-    console.log(e);
+    winston.error(e);
     return "error converting";
   }
 }
@@ -27,8 +27,18 @@ var _sendType = {
   SUCCESS: 'success',
 };
 
-function _send(res, type, message) {
+function _send(res, type, message, logentries) {
   if (!message) { message = ""; }
+
+  if (logentries) {
+    if (type === _sendType.ERROR) {
+      winston.error(logentries);
+    } else if (type === _sendType.WARNING) {
+      winston.warning(logentries);
+    } else {
+      winston.info(logentries);
+    }
+  }
 
   res.send(type + ": " + message);
 }
@@ -64,16 +74,14 @@ function eastmoney_report_content (req, res) {
 
             report.created = created;
             report.content = content;
-            var _logentry = '/cron/eastmoney/report/content: ' + report.id + " " + req.get('user-agent');
+            var _successLog = '/cron/eastmoney/report/content: ' + report.id + " " + req.get('user-agent');
             report.save().success(function () {
-              winston.info(_logentry);
-              _send(res, _sendType.SUCCESS);
+              _send(res, _sendType.SUCCESS, '', _successLog);
             });
           }
         } else {
-          console.log(e);
-          console.log(html);
-          _send(res, _sendType.ERROR, html);
+          var _errorLog = e + ', ' + report.id + ', ' + body;
+          _send(res, _sendType.ERROR, html, _errorLog);
         }
       });
     } else {
