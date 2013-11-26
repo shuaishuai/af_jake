@@ -44,6 +44,8 @@ function _send(res, type, message, logentries) {
 }
 
 function eastmoney_report_content (req, res) {
+  winston.info('/c/e/r/c: ' + req.get('user-agent'));
+
   var query = {
     where: {
       content: 'EMPTY',
