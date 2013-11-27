@@ -21,30 +21,17 @@ function _converter(body) {
   }
 }
 
-var _sendType = {
-  ERROR: 'error',
-  WARNING: 'warning',
-  SUCCESS: 'success',
-};
+var utils = require('./_utils'),
+    textSuccess = utils.textSuccess,
+    textWarning = utils.textWarning,
+    textError = utils.textError;
 
-function _send(res, type, message, logentries) {
-  if (!message) { message = ""; }
-
-  if (logentries) {
-    if (type === _sendType.ERROR) {
-      winston.error(logentries);
-    } else if (type === _sendType.WARNING) {
-      winston.warning(logentries);
-    } else {
-      winston.info(logentries);
-    }
-  }
-
-  res.send(type + ": " + message);
-}
 
 function eastmoney_report_content (req, res) {
-  winston.info('/c/e/r/c: ' + req.get('user-agent'));
+  // winston.info('#########/c/e/r/c');
+  // winston.info(req.headers);
+  // winston.info(req.get('user-agent'));
+  // winston.info(req.get('cache-control'));
 
   var query = {
     where: {
@@ -63,7 +50,7 @@ function eastmoney_report_content (req, res) {
 
           if (errText.length > 0) {
             report.destroy().success(function () {
-              _send(res, _sendType.WARNING, 'page not found');
+              textWarning(res, 'page not found');
             });
           } else {
             var $created = $html.find('.report-infos span').eq(1);
@@ -78,16 +65,16 @@ function eastmoney_report_content (req, res) {
             report.content = content;
             var _successLog = '/cron/eastmoney/report/content: ' + report.id + " " + req.get('user-agent');
             report.save().success(function () {
-              _send(res, _sendType.SUCCESS, '', _successLog);
+              textSuccess(res, report.id, _successLog);
             });
           }
         } else {
           var _errorLog = e + ', ' + report.id + ', ' + body;
-          _send(res, _sendType.ERROR, html, _errorLog);
+          textError(res, html, _errorLog);
         }
       });
     } else {
-      _send(res, _sendType.SUCCESS, 'no job');
+      textSuccess(res, 'no job');
     }
   });
 }
