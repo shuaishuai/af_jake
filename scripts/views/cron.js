@@ -21,18 +21,13 @@ function _converter(body) {
   }
 }
 
-var utils = require('./_utils'),
-    textSuccess = utils.textSuccess,
-    textWarning = utils.textWarning,
-    textError = utils.textError;
+var _senders = require('./_senders'),
+    textSuccess = _senders.textSuccess,
+    textWarning = _senders.textWarning,
+    textError = _senders.textError;
 
 
 function eastmoney_report_content (req, res) {
-  // winston.info('#########/c/e/r/c');
-  // winston.info(req.headers);
-  // winston.info(req.get('user-agent'));
-  // winston.info(req.get('cache-control'));
-
   var query = {
     where: {
       content: 'EMPTY',

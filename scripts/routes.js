@@ -1,19 +1,11 @@
 var basic = require('./views/basic'),
     api = require('./views/api'),
     cron = require('./views/cron'),
-    feed = require('./views/feed');
+    feed = require('./views/feed'),
+    _headers = require('./views/_headers');
 
+var never_cache = _headers.never_cache;
 
-function never_cache(req, res, next) {
-  var now = Date.now();
-  res.set({
-    'Cache-Control': 'max-age=0',
-    'Expires': now,
-    'Last-Modified': now,
-  });
-
-  next();
-}
 
 function init(app) {
   // basic
