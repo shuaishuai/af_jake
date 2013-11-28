@@ -74,7 +74,7 @@ function eastmoney_report_content (req, res) {
         }
       });
     } else {
-      textSuccess(res, 'no job');
+      textSuccess(res, 'no job ' + Date.now());
     }
   });
 }
