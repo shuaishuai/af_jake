@@ -342,6 +342,9 @@
     },
     "node-logentries": {
       "version": "0.1.2"
+    },
+    "q": {
+      "version": "0.9.7"
     }
   }
 }

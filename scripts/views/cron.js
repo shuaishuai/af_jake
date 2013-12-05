@@ -1,25 +1,14 @@
-var _ = require('lodash'),
-    moment = require('moment'),
-    $ = require('cheerio'),
-    request = require('request');
+var _ = require('lodash');
 
 var winston = require('../logger');
 
 var models = require('../models'),
     Report = models.Report;
 
-var iconv = require('iconv'),
-    ic_gb2312_to_utf8 = new iconv.Iconv('gb2312', 'utf-8//IGNORE');
-
-function _converter(body) {
-  try {
-    var buf = ic_gb2312_to_utf8.convert(body);
-    return buf.toString('utf-8');
-  } catch (e) {
-    winston.error(e);
-    return "error converting";
-  }
-}
+var EastMoney = require('../domain/crawlers/eastmoney'),
+    em = new EastMoney(),
+    Ganji = require('../domain/crawlers/ganji'),
+    gj = new Ganji();
 
 var _senders = require('./_senders'),
     textSuccess = _senders.textSuccess,
@@ -36,38 +25,27 @@ function eastmoney_report_content (req, res) {
 
   Report.find(query).success(function (report) {
     if (report) {
-      request.get(report.url, { encoding: null }, function (e, r, body) {
-        var html = _converter(body);
-
-        if (!e && r.statusCode === 200 && html != "error converting") {
-          var $html = $(html);
-          var errText = $html.find(".errText");
-
-          if (errText.length > 0) {
+      em.parseReportContent(report.url)
+        .then(function (message) {
+          if ('warning' in message) {
             report.destroy().success(function () {
-              textWarning(res, 'page not found');
+              textWarning(res, message.warning);
             });
-          } else {
-            var $created = $html.find('.report-infos span').eq(1);
-            var created = moment($created.text(), 'YYYY年MM月DD日 HH:mm').format();
-
-            var $paras = $html.find('#ContentBody p').slice(1);
-            var content = $paras.map(function () {
-              return $(this).text();
-            }).join('\n');
-
-            report.created = created;
-            report.content = content;
-            var _successLog = '/cron/eastmoney/report/content: ' + report.id + " " + req.get('user-agent');
+          } else if ( 'success' in message) {
+            report.created = message.success.created;
+            report.content = message.success.content;
+            var _successLog = '/c/e/r/c: ' + report.id + ' ' + req.get('user-agent');
             report.save().success(function () {
               textSuccess(res, report.id, _successLog);
             });
+          } else {
+            textWarning(res, 'NotImplementedException');
           }
-        } else {
-          var _errorLog = e + ', ' + report.id + ', ' + body;
-          textError(res, html, _errorLog);
-        }
-      });
+        })
+        .fail(function (message) {
+          textError(res, message.error);
+        })
+        .done();
     } else {
       textSuccess(res, 'no job ' + Date.now());
     }
@@ -75,22 +53,22 @@ function eastmoney_report_content (req, res) {
 }
 
 function parttime_ganji(req, res) {
-  var host = "http://sh.ganji.com";
-  var url = host + "/jzwangzhanjianshe/";
-  request.get(url, { encoding: null }, function (e, r, body) {
-    var parsedHTML  = $.load(body);
-    var job_list = parsedHTML('.job-list').map(function () {
-      var $dl = $(this);
-      var $a = $dl.find('dt a');
-
-      return { created: $dl.attr('pt'), url: host + $a.attr('href') };
-    });
-    console.log(job_list);
-
-    // res.send(body);
-  });
-
-  res.send('parttime_ganji');
+  gj.getJobList()
+    .then(function (message) {
+      if ('warning' in message) {
+        textWarning(res, message.warning);
+      } else if ('success' in message) {
+        var job_list = message.success;
+        var _successLog = '/c/p/g: ' + Date.now() + ' ' + req.get('user-agent');
+        textSuccess(res, Date.now(), _successLog);
+      } else {
+        textWarning(res, 'NotImplementedException');
+      }
+    })
+    .fail(function (message) {
+      textError(res, message.error);
+    })
+    .done();
 }
 
 module.exports = {
