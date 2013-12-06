@@ -1,6 +1,6 @@
 var _ = require('lodash');
 
-var winston = require('../logger');
+var KV = require('../domain/kv');
 
 var models = require('../models'),
     Report = models.Report;
@@ -15,6 +15,37 @@ var _senders = require('./_senders'),
     textWarning = _senders.textWarning,
     textError = _senders.textError;
 
+
+function eastmoney_report_list (req, res) {
+  var key = "cee3418f-594d-11e2-a7c3-bc5ff444b3d5-lastreport";
+  KV.get(key, function (value) {
+    em.parseReportList(value)
+      .then(function (message) {
+        if ('warning' in message) {
+          textWarning(res, message.warning);
+        } else if ('success' in message) {
+          var reportList = message.success;
+          var last_report = reportList[0].url;
+
+          Report.bulkCreate(reportList)
+                .success(function () {
+                  KV.set(key, last_report, function () {
+                    textSuccess(res, 'success');
+                  });
+                })
+                .error(function () {
+                  textError(res, 'Report.bulkCreate');
+                });
+        } else {
+          textWarning(res, 'NotImplementedException');
+        }
+      })
+      .fail(function (message) {
+        textError(res, message.error);
+      })
+      .done();
+  });
+}
 
 function eastmoney_report_content (req, res) {
   var query = {
@@ -72,6 +103,7 @@ function parttime_ganji(req, res) {
 }
 
 module.exports = {
+  eastmoney_report_list: eastmoney_report_list,
   eastmoney_report_content: eastmoney_report_content,
   parttime_ganji: parttime_ganji,
 };

@@ -11,8 +11,8 @@ var Report = sequelize.define('Report', {
   name: Sequelize.STRING(31),
   url: Sequelize.STRING(255),
   title: Sequelize.STRING(255),
-  content: Sequelize.TEXT,
-  flag: Sequelize.INTEGER,
+  content: { type: Sequelize.TEXT, defaultValue: 'EMPTY' },
+  flag: { type: Sequelize.INTEGER, defaultValue: 0 },
 }, { timestamps: false, tableName: 'report' });
 
 

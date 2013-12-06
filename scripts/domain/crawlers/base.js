@@ -2,6 +2,8 @@ var _ = require('lodash'),
     q = require('q'),
     request = require('request');
 
+var winston = require('../../logger');
+
 function Crawler (argument) {
   return this;
 }
@@ -29,6 +31,12 @@ Crawler.prototype.get = function(url, options) {
 
   return d.promise;
 };
+
+// Crawler.prototype.error_2_str = function (error) {
+//   winston.error(error.stack);
+//   var errorText = error.name + ': ' + error.message;
+//   return errorText;
+// };
 
 
 module.exports = Crawler;

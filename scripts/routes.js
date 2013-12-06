@@ -16,6 +16,7 @@ function init(app) {
   app.get("/api/yicai/heima", api.yicai_heima);
 
   // cron
+  app.get("/cron/eastmoney/report/list", never_cache, cron.eastmoney_report_list);
   app.get("/cron/eastmoney/report/content", never_cache, cron.eastmoney_report_content);
   app.get("/cron/parttime/ganji", never_cache, cron.parttime_ganji);
 

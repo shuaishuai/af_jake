@@ -1,4 +1,5 @@
 var q = require('q'),
+    _ = require('lodash'),
     $ = require('cheerio'),
     moment = require('moment');
 
@@ -12,6 +13,59 @@ var EastMoney = function () {
 };
 
 EastMoney.prototype = new Crawler();
+
+EastMoney.prototype.parseReportList = function (lastreport) {
+  var d = q.defer();
+
+  var host = "http://data.eastmoney.com";
+  var url = host + "/report/";
+
+  this.get(url)
+      .then(function (body) {
+        var html;
+        try {
+          var buf = ic_gb2312_to_utf8.convert(body);
+          html = buf.toString('utf-8');
+        } catch (e) {
+          d.reject({ error: 'error converting' });
+        }
+
+        // ** their typo
+        html = html.replace(/<\/a><\/td><\/div>/g, "</a></div></td>");
+
+        var $html = $(html);
+        var $trList = $html.find('table#dt_1 tbody tr');
+
+        var reportList = [],
+            $tdList;
+        for (var i = 0; i < $trList.length; i++) {
+          $tdList = $trList.eq(i).find('td');
+          var href = host + $tdList.eq(5).find('a').attr('href');
+
+          if (href === lastreport) {
+            d.resolve({ success: [] });
+            break;
+          }
+
+          reportList.push({
+            "created": $tdList.eq(1).find("span").attr("title"),
+            "code": $tdList.eq(2).text(),
+            "name": $tdList.eq(2).text(),
+            "url": href,
+            "title": $tdList.eq(5).find("a").attr("title"),
+          });
+        }
+
+        d.resolve({ success: reportList });
+      })
+      .fail(function (error) {
+        var errorText = error.name + ': ' + error.message;
+        d.reject({ error: errorText });
+      })
+      .done();
+
+  return d.promise;
+};
 
 EastMoney.prototype.parseReportContent = function (url) {
   var d = q.defer();
@@ -48,8 +102,9 @@ EastMoney.prototype.parseReportContent = function (url) {
           });
         }
       })
-      .fail(function (errorText) {
-        d.reject(errorText);
+      .fail(function (error) {
+        var errorText = error.name + ': ' + error.message;
+        d.reject({ error: errorText });
       })
       .done();
 
