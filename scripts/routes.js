@@ -13,7 +13,8 @@ function init(app) {
   app.get("/hello", basic.hello);
 
   // api
-  app.get("/api/yicai/heima", api.yicai_heima);
+  app.get("/api/stockcode/info/:code", api.stockcode_info);
+  app.get('/api/stockcode/filter', api.stockcode_filter);
 
   // cron
   app.get("/cron/eastmoney/report/list", never_cache, cron.eastmoney_report_list);

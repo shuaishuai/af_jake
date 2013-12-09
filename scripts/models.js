@@ -19,12 +19,28 @@ var Report = sequelize.define('Report', {
 var KV = sequelize.define('KV', {
   id: Sequelize.INTEGER,
   updated: Sequelize.DATE,
-  key: Sequelize.STRING(63), // The column name 'key' is a MySQL reserved keyword
+  key: Sequelize.STRING(63), // FIXME: 'key' is a MySQL reserved keyword
   value: Sequelize.STRING(255),
 }, { timestamps: false, tableName: 'kv' });
+
+
+var StockCode = sequelize.define('StockCode', {
+  id: Sequelize.INTEGER, // FIXME: primary key
+  code: Sequelize.INTEGER, // FIXME: unique key
+  name: Sequelize.STRING(31),
+  market: Sequelize.STRING(7),
+  is_active: Sequelize.INTEGER,  // NOT delist, AND NOT broken
+  is_delist: Sequelize.INTEGER,
+  is_st: Sequelize.INTEGER,
+  is_new: Sequelize.INTEGER,
+  is_broken: Sequelize.INTEGER,
+  is_hs300: Sequelize.INTEGER,
+  is_jqka: Sequelize.INTEGER,
+}, { timestamps: false, tableName: 'stock_code' });
 
 
 module.exports = {
   Report: Report,
   KV: KV,
+  StockCode: StockCode,
 };

@@ -5,16 +5,7 @@ function index(req, res) {
 var KV = require('../domain/kv');
 
 function hello(req, res) {
-  KV.set('not-exist', 'not-a-value')
-    .then(function (value) {
-      console.log(value);
-    })
-    .fail(function (errorText) {
-      console.log(errorText);
-    })
-    .done();
-
-  res.send('hello');
+  res.json({ hello: 'world' });
 }
 
 module.exports = {

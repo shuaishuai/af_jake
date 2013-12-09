@@ -1,51 +1,57 @@
-var cheerio = require('cheerio');
-var request = require('request');
-var async = require('async');
+var _ = require('lodash');
 
-var endpoint_yicai = "http://www.yicai.com/";
-function yicai_heima(req, res) {
-  async.waterfall([
-    function (callback) {
-      var endpoint = "bo/heimajingxuan/list/";
-      request.get(endpoint_yicai + endpoint, function (e, r, body) {
-        if (!e && r.statusCode == 200) {
-          var $ = cheerio.load(body);
-          var endpoint_item = $(".views-field-title a").first().attr('href');
+var models = require('../models.js');
+    StockCode = models.StockCode;
 
-          callback(null, endpoint_item);
-        } else {
-          res.send("failed");
-        }
-      });
-    },
-    function (endpoint, callback) {
-      request.get(endpoint_yicai + endpoint, function (e, r, body) {
-        if (!e && r.statusCode == 200) {
-          var $ = cheerio.load(body);
-          var id = $('.video-cion').attr('id');
+// /api/stockcode/info/600016
+function stockcode_info(req, res) {
+  var query = {
+    where: {
+      code: req.params.code,
+    }
+  };
 
-          console.log(id);
-
-          var downloadUrl = [
-            "http://v.yicai.com/kalturaCE/content/entry/data/0/53/",
-            id.substring(0, id.length - 2),
-            "_100000.flv"
-          ].join("");
-
-          console.log(downloadUrl);
-
-          res.send("success");
-        } else {
-          res.send("failed");
-        }
-      });
-    }],
-    function (err, result) {
-      console.log(err);
-      res.send("failed");
+  StockCode.find(query).success(function (stockcode) {
+    res.json(stockcode);
   });
+  // FIXME: not found
 }
 
+// /api/stockcode/filter?market=sh&is_hs300=1&is_active=1&is_jqka=1
+function stockcode_filter(req, res) {
+  var query = {
+    where: {}
+  };
+
+  market = req.query['market'];
+  if (market) {
+    query.where['market'] = market;
+  }
+
+  is_active = req.query['is_active'];
+  if (is_active) {
+    query.where['is_active'] = parseInt(is_active, 10);
+  }
+
+  is_hs300 = req.query['is_hs300'];
+  if (is_hs300) {
+    query.where['is_hs300'] = parseInt(is_hs300, 10);
+  }
+
+  is_jqka = req.query['is_jqka'];
+  if (is_jqka) {
+    query.where['is_jqka'] = parseInt(is_jqka, 10);
+  }
+
+  StockCode.findAll(query).success(function (stockcodes) {
+    var codes = _.pluck(stockcodes, 'code');
+    res.json(codes);
+  });
+  // FIXME: not found
+}
+
+
 module.exports = {
-  yicai_heima: yicai_heima,
+  stockcode_info: stockcode_info,
+  stockcode_filter: stockcode_filter
 };
