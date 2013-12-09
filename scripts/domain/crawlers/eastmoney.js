@@ -43,7 +43,6 @@ EastMoney.prototype.parseReportList = function (lastreport) {
           var href = host + $tdList.eq(5).find('a').attr('href');
 
           if (href === lastreport) {
-            d.resolve({ success: [] });
             break;
           }
 

@@ -17,7 +17,7 @@ function _text(type) {
       logger(logentries);
     }
 
-    res.send(type + ": " + message);
+    res.send([Date.now(), type, message].join(', '));
   };
 }
 
