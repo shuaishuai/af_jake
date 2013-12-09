@@ -2,14 +2,17 @@ function index(req, res) {
   res.render('index.dust');
 }
 
-var EastMoney = require('../domain/crawlers/eastmoney'),
-    Ganji = require('../domain/crawlers/ganji');
+var KV = require('../domain/kv');
 
 function hello(req, res) {
-  var m = new EastMoney();
-  var g = new Ganji();
-  console.log(m.name);
-  console.log(g.name);
+  KV.set('not-exist', 'not-a-value')
+    .then(function (value) {
+      console.log(value);
+    })
+    .fail(function (errorText) {
+      console.log(errorText);
+    })
+    .done();
 
   res.send('hello');
 }

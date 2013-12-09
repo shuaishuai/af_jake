@@ -18,24 +18,34 @@ var _senders = require('./_senders'),
 
 function eastmoney_report_list (req, res) {
   var key = "cee3418f-594d-11e2-a7c3-bc5ff444b3d5-lastreport";
-  KV.get(key, function (value) {
-    em.parseReportList(value)
+  KV.get(key)
+    .then(function (value) {
+      em.parseReportList(value)
       .then(function (message) {
         if ('warning' in message) {
           textWarning(res, message.warning);
         } else if ('success' in message) {
           var reportList = message.success;
-          var last_report = reportList[0].url;
 
-          Report.bulkCreate(reportList)
-                .success(function () {
-                  KV.set(key, last_report, function () {
-                    textSuccess(res, 'success');
+          if (reportList.length > 0) {
+            var last_report = reportList[0].url;
+            Report.bulkCreate(reportList)
+                  .success(function () {
+                    KV.set(key, last_report)
+                      .then(function () {
+                        textSuccess(res, 'success');
+                      }).
+                      fail(function (errorText) {
+                        textError(res, errorText);
+                      });
+                  })
+                  .error(function (errors) {
+                    console.log('F');
+                    textError(res, 'Report.bulkCreate', errors);
                   });
-                })
-                .error(function () {
-                  textError(res, 'Report.bulkCreate');
-                });
+          } else {
+            textSuccess(res, 'no new reports');
+          }
         } else {
           textWarning(res, 'NotImplementedException');
         }
@@ -44,7 +54,11 @@ function eastmoney_report_list (req, res) {
         textError(res, message.error);
       })
       .done();
-  });
+    })
+    .fail(function (errorText) {
+      textError(res, errorText);
+    })
+    .done();
 }
 
 function eastmoney_report_content (req, res) {
@@ -78,7 +92,7 @@ function eastmoney_report_content (req, res) {
         })
         .done();
     } else {
-      textSuccess(res, 'no job ' + Date.now());
+      textSuccess(res, 'no job ');
     }
   });
 }
@@ -90,8 +104,8 @@ function parttime_ganji(req, res) {
         textWarning(res, message.warning);
       } else if ('success' in message) {
         var job_list = message.success;
-        var _successLog = '/c/p/g: ' + Date.now() + ' ' + req.get('user-agent');
-        textSuccess(res, Date.now(), _successLog);
+        var _successLog = '/c/p/g: ' + req.get('user-agent');
+        textSuccess(res, 'success', _successLog);
       } else {
         textWarning(res, 'NotImplementedException');
       }
