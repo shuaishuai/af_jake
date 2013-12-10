@@ -33,7 +33,8 @@ function eastmoney_report_list (req, res) {
                   .success(function () {
                     KV.set(key, last_report)
                       .then(function () {
-                        textSuccess(res, 'success');
+                        var _successLog = '/c/e/r/l: ' + reportList.length + ' ' + req.get('user-agent');
+                        textSuccess(res, 'success', _successLog);
                       }).
                       fail(function (errorText) {
                         textError(res, errorText);
