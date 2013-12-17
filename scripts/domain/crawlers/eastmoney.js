@@ -49,7 +49,7 @@ EastMoney.prototype.parseReportList = function (lastreport) {
           reportList.push({
             "created": $tdList.eq(1).find("span").attr("title"),
             "code": $tdList.eq(2).text(),
-            "name": $tdList.eq(2).text(),
+            "name": $tdList.eq(3).text(),
             "url": href,
             "title": $tdList.eq(5).find("a").attr("title"),
           });
