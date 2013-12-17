@@ -12,7 +12,7 @@ var Report = sequelize.define('Report', {
   url: Sequelize.STRING(255),
   title: Sequelize.STRING(255),
   content: { type: Sequelize.TEXT, defaultValue: 'EMPTY' },
-  flag: { type: Sequelize.INTEGER, defaultValue: 0 },
+  flag: { type: Sequelize.INTEGER, defaultValue: 1 }, // 1: unread, 2: read, 3: star
 }, { timestamps: false, tableName: 'report' });
 
 
