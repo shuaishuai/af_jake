@@ -1,4 +1,5 @@
-var q = require('q');
+var q = require('q'),
+    moment = require('moment');
 
 var KV = require('../models').KV;
 
@@ -52,4 +53,21 @@ module.exports = {
 
     return d.promise;
   },
+
+  isExpired: function (key, interval) { // interval in seconds
+    var d = q.defer();
+
+    this.get(key)
+        .then(function (value) {
+          var v = moment(value).add('seconds', interval);
+          var now = moment();
+          d.resolve(v <= now);
+        })
+        .fail(function (errorText) {
+          d.reject(errorText);
+        })
+        .done();
+
+    return d.promise;
+  }
 };

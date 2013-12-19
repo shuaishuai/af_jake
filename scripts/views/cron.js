@@ -1,14 +1,18 @@
-var _ = require('lodash');
+var _ = require('lodash'),
+    moment = require('moment');
 
 var KV = require('../domain/kv');
 
 var models = require('../models'),
-    Report = models.Report;
+    Report = models.Report,
+    Price = models.Price;
 
 var EastMoney = require('../domain/crawlers/eastmoney'),
     em = new EastMoney(),
     Ganji = require('../domain/crawlers/ganji'),
-    gj = new Ganji();
+    gj = new Ganji(),
+    ICBC = require('../domain/crawlers/icbc'),
+    icbc = new ICBC();
 
 var _senders = require('./_senders'),
     textSuccess = _senders.textSuccess,
@@ -117,8 +121,69 @@ function parttime_ganji(req, res) {
     .done();
 }
 
+function price_au(req, res) {
+  var key = "b65af840-56e9-11e2-869c-bc5ff444b3d5";
+  var interval = 60 * 60; // 1 hour
+
+  KV.isExpired(key, interval)
+    .then(function (isExpired) {
+      if (isExpired) {
+        icbc.fetchPrice()
+            .then(function (message) {
+              if ('warning' in message) {
+                textWarning(res, message.warning);
+              } else if ('success' in message) {
+                // Price.create(message.success, { })
+                var p = Price.build(message.success);
+
+                var ago_7_days = moment().add('days', -7).format();
+                var query = {
+                  where: {
+                    fetched: {
+                      gt: ago_7_days
+                    }
+                  },
+                  order: 'medial'
+                };
+
+                Price.findAll(query).success(function (prices) {
+                  mx = prices[0].medial;
+                  mi = prices.slice(-1)[0].medial;
+
+                  p.lower = 0.20 * mx + 0.80 * mi;
+                  p.upper = 0.80 * mx + 0.20 * mi;
+
+                  p.save().success(function () {
+                    KV.set(key, p.fetched)
+                      .then(function () {
+                        var _successLog = '/c/p/au: ' + req.get('user-agent');
+                        textSuccess(res, 'success', _successLog);
+                      })
+                      .fail(function (errorText) {
+                        textError(res, errorText);
+                      })
+                      .done();
+                  });
+                });
+              } else {
+                textWarning(res, 'NotImplementedException');
+              }
+            })
+            .fail(function (message) {
+              textError(res, message.error);
+            })
+            .done();
+      } else {
+        textWarning(res, 'not expired');
+      }
+    })
+    .fail()
+    .done();
+}
+
 module.exports = {
   eastmoney_report_list: eastmoney_report_list,
   eastmoney_report_content: eastmoney_report_content,
   parttime_ganji: parttime_ganji,
+  price_au: price_au,
 };
