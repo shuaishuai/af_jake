@@ -2,9 +2,10 @@ var basic = require('./views/basic'),
     api = require('./views/api'),
     cron = require('./views/cron'),
     feed = require('./views/feed'),
-    _headers = require('./views/_headers');
+    download = require('./views/download');
 
-var never_cache = _headers.never_cache;
+var _headers = require('./views/_headers'),
+    never_cache = _headers.never_cache;
 
 
 function init(app) {
@@ -23,6 +24,9 @@ function init(app) {
 
   // atom
   app.get("/feed/reports", feed.reports);
+
+  // download
+  app.get("/download/price.csv/:begin/:end", download.price_csv);
 
   // error handling
   app.use(function(req, res, next){

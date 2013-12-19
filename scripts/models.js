@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 // http://sequelizejs.com/documentation#models-data-types
 var Sequelize = require("sequelize"),
     sequelize = require('./config/mysql').sequelize;
@@ -39,8 +41,39 @@ var StockCode = sequelize.define('StockCode', {
 }, { timestamps: false, tableName: 'stock_code' });
 
 
+var Price = sequelize.define('Price', {
+  id: Sequelize.INTEGER, // FIXME: primary key
+  fetched: Sequelize.DATE,
+  sell: Sequelize.DECIMAL(10, 2),
+  buy: Sequelize.DECIMAL(10, 2),
+  medial: Sequelize.DECIMAL(10, 2),
+  lower: Sequelize.DECIMAL(10, 2),
+  upper: Sequelize.DECIMAL(10, 2),
+}, { timestamps: false, tableName: 'price',
+     // FIXME: not elegant
+     classMethods: {
+       repr_fields: function () {
+         return [ 'fetched', 'sell', 'buy', 'medial', 'lower', 'upper' ];
+       }
+     },
+     instanceMethods: {
+       repr: function () {
+         return {
+           'fetched': moment(this.fetched).format(),
+           'sell': this.sell,
+           'buy': this.buy,
+           'medial': this.medial,
+           'lower': this.lower,
+           'upper': this.upper,
+         };
+       }
+     }
+});
+
+
 module.exports = {
   Report: Report,
   KV: KV,
   StockCode: StockCode,
+  Price: Price,
 };
