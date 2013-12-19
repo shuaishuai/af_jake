@@ -6,8 +6,8 @@ var models = require('../models'),
     Price = models.Price;
 
 function price_csv (req, res) {
-  var begin = moment(req.params['begin']);
-  var end = moment(req.params['end']);
+  var begin = moment(req.param('begin'));
+  var end = moment(req.param('end'));
 
   if (begin.isValid() && end.isValid()) {
     if (begin < end) {
