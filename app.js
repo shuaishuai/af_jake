@@ -41,5 +41,5 @@ var server = require('./scripts/config/server').createServer(app);
 // routes
 require('./scripts/routes').init(app);
 
-server.listen(1337);
-console.log("server starts on port 1337...");
+server.listen(process.env.VCAP_APP_PORT || 3000);
+console.log("server starts on port: " + (process.env.VCAP_APP_PORT || 3000));
