@@ -83,7 +83,7 @@ EastMoney.prototype.parseReportContent = function (url) {
         var errText = $html.find(".errText");
 
         if (errText.length > 0) {
-          d.reject({ warning: 'page not found' });
+          d.resolve({ warning: 'page not found' });
         } else {
           var $created = $html.find('.report-infos span').eq(1);
           var created = moment($created.text(), 'YYYY年MM月DD日 HH:mm').format();
@@ -102,6 +102,7 @@ EastMoney.prototype.parseReportContent = function (url) {
         }
       })
       .fail(function (error) {
+        console.log(error);
         var errorText = error.name + ': ' + error.message;
         d.reject({ error: errorText });
       })
