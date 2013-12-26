@@ -181,9 +181,26 @@ function price_au(req, res) {
     .done();
 }
 
+var Cron = require('../domain/cron');
+
+function main(req, res) {
+  Cron.excuteJob()
+    .then(function (message) {
+      if ('success' in message) {
+        var _successLog = message.success + ', ' + req.get('user-agent');
+        textSuccess(res, message.success, _successLog);
+      } else if ('warning' in message) {
+        textWarning(res, message.warning);
+      }
+    })
+    .fail()
+    .done();
+}
+
 module.exports = {
   eastmoney_report_list: eastmoney_report_list,
   eastmoney_report_content: eastmoney_report_content,
   parttime_ganji: parttime_ganji,
   price_au: price_au,
+  main: main,
 };

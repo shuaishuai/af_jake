@@ -70,10 +70,20 @@ var Price = sequelize.define('Price', {
      }
 });
 
+var CronTab = sequelize.define('CronTab', {
+  id: Sequelize.INTEGER,
+  created: Sequelize.DATE,
+  active: Sequelize.INTEGER,
+  uuid: Sequelize.STRING(63),
+  name: Sequelize.STRING(63),
+  interval: Sequelize.INTEGER,
+  last_attempt: Sequelize.BIGINT, // Date.now(), utc timestamp
+}, { timestamps: false, tableName: 'cron_tab' });
 
 module.exports = {
   Report: Report,
   KV: KV,
   StockCode: StockCode,
   Price: Price,
+  CronTab: CronTab,
 };

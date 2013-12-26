@@ -22,6 +22,7 @@ function init(app) {
   app.get("/cron/eastmoney/report/content", never_cache, cron.eastmoney_report_content);
   app.get("/cron/parttime/ganji", never_cache, cron.parttime_ganji);
   app.get("/cron/price/au", never_cache, cron.price_au);
+  app.get("/cron", never_cache, cron.main);
 
   // atom
   app.get("/feed/reports", feed.reports);
