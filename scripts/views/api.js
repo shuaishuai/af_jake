@@ -23,24 +23,24 @@ function stockcode_filter(req, res) {
     where: {}
   };
 
-  market = req.query['market'];
+  market = req.query.market;
   if (market) {
-    query.where['market'] = market;
+    query.where.market = market;
   }
 
-  is_active = req.query['is_active'];
+  is_active = req.query.is_active;
   if (is_active) {
-    query.where['is_active'] = parseInt(is_active, 10);
+    query.where.is_active = parseInt(is_active, 10);
   }
 
-  is_hs300 = req.query['is_hs300'];
+  is_hs300 = req.query.is_hs300;
   if (is_hs300) {
-    query.where['is_hs300'] = parseInt(is_hs300, 10);
+    query.where.is_hs300 = parseInt(is_hs300, 10);
   }
 
-  is_jqka = req.query['is_jqka'];
+  is_jqka = req.query.is_jqka;
   if (is_jqka) {
-    query.where['is_jqka'] = parseInt(is_jqka, 10);
+    query.where.is_jqka = parseInt(is_jqka, 10);
   }
 
   StockCode.findAll(query).success(function (stockcodes) {

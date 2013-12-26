@@ -23,5 +23,10 @@
     "request": "~2.30.0",
     "sequelize": "~2.0.0-beta.0",
     "winston": "~0.7.2"
+  },
+  "devDependencies": {
+    "grunt-mocha-test": "~0.8.1",
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.8.0"
   }
 }

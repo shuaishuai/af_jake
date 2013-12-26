@@ -20,7 +20,7 @@ ICBC.prototype.fetchPrice = function () {
       .then(function (body) {
         var $html = $(body.toString());
 
-        var $trList = $html.find('#TABLE1 tr')
+        var $trList = $html.find('#TABLE1 tr');
 
         var $trAu = $trList.eq(1);
         // var $trAg = $tr.eq(2);

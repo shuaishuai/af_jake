@@ -2,10 +2,9 @@ var _ = require('lodash'),
     q = require('q'),
     moment = require('moment');
 
-// http://sequelizejs.com/documentation#models-data-types
 var Sequelize = require("sequelize"),
-    sequelize = require('./config/mysql').sequelize;
-
+    mysql_config = require('./config/env').mysql_config,
+    sequelize = new Sequelize(mysql_config, { logging: false });
 
 // ** always order by `id`, `created` is not reliable
 var Report = sequelize.define('Report', {
