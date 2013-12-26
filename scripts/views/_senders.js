@@ -15,6 +15,8 @@ function _text(type) {
 
     if (logentries) {
       logger(logentries);
+    } else {
+      logger(message);
     }
 
     res.send([Date.now(), type, message].join(', '));

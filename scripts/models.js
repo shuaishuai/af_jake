@@ -1,4 +1,6 @@
-var moment = require('moment');
+var _ = require('lodash'),
+    q = require('q'),
+    moment = require('moment');
 
 // http://sequelizejs.com/documentation#models-data-types
 var Sequelize = require("sequelize"),
@@ -78,7 +80,33 @@ var CronTab = sequelize.define('CronTab', {
   name: Sequelize.STRING(63),
   interval: Sequelize.INTEGER,
   last_attempt: Sequelize.BIGINT, // Date.now(), utc timestamp
-}, { timestamps: false, tableName: 'cron_tab' });
+}, { timestamps: false, tableName: 'cron_tab',
+  classMethods: {
+    getJob: function () {
+      var d = q.defer();
+
+      var query = {
+        where: {
+          active: 1,
+        }
+      };
+
+      this.findAll(query)
+        .success(function (ct) {
+          var now = Date.now();
+
+          var job = _.find(ct, function (c) {
+            var expired = c.last_attempt + c.interval;
+            return expired <= now;
+          });
+
+          d.resolve(job);
+        });
+
+      return d.promise;
+    }
+  },
+});
 
 module.exports = {
   Report: Report,

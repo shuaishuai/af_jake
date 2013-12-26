@@ -181,7 +181,7 @@ function price_au(req, res) {
     .done();
 }
 
-var Cron = require('../domain/cron');
+var Cron = require('../domain/crons/main');
 
 function main(req, res) {
   Cron.excuteJob()
@@ -190,7 +190,8 @@ function main(req, res) {
         var _successLog = message.success + ', ' + req.get('user-agent');
         textSuccess(res, message.success, _successLog);
       } else if ('warning' in message) {
-        textWarning(res, message.warning);
+        var _warningLog = message.warning + ', ' + req.get('user-agent');
+        textWarning(res, message.warning, _warningLog);
       }
     })
     .fail()
