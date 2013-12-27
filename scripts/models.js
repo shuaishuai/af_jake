@@ -87,7 +87,8 @@ var CronTab = sequelize.define('CronTab', {
       var query = {
         where: {
           active: 1,
-        }
+        },
+        order: 'last_attempt',
       };
 
       this.findAll(query)

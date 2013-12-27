@@ -8,6 +8,7 @@ var models = require('../../models'),
 
 var JOBS = {
   'bd1e98c0-6ddc-11e3-88e6-08002708e90e': require('./job_eastmoney_report_content'),
+  '142c02ea-6ea2-11e3-b6f8-08002708e90e': require('./job_eastmoney_report_list'),
 };
 
 module.exports = {
