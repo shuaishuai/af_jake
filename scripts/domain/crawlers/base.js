@@ -24,7 +24,7 @@ Crawler.prototype.get = function(url, options) {
     if (!error && response.statusCode === 200) {
       d.resolve(body);
     } else {
-      // FIXME: console.log(error, response)
+      console.log(error, response, body);
       d.reject(error);
     }
   });

@@ -29,15 +29,6 @@ function init(app) {
 
   // download
   app.get("/download/price.csv/:begin/:end", download.price_csv);
-
-  // error handling
-  app.use(function(req, res, next){
-    res.status(404).render("errors/404.dust");
-  });
-
-  app.use(function(err, req, res, next){
-    res.status(500).render("errors/500.dust", { err: err.stack });
-  });
 }
 
 exports.init = init;

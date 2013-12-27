@@ -41,5 +41,15 @@ var server = require('./scripts/config/server').createServer(app);
 // routes
 require('./scripts/routes').init(app);
 
+// error handling
+app.use(function(req, res, next){
+  res.status(404).render("errors/404.dust");
+});
+
+app.use(function(err, req, res, next){
+  res.status(500).render("errors/500.dust", { err: err.stack });
+});
+
+
 server.listen(process.env.VCAP_APP_PORT || 3000);
 console.log("server starts on port: " + (process.env.VCAP_APP_PORT || 3000));

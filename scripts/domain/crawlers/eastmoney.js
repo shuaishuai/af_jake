@@ -58,8 +58,7 @@ EastMoney.prototype.parseReportList = function (lastreport) {
         d.resolve({ success: reportList });
       })
       .fail(function (error) {
-        var errorText = error.name + ': ' + error.message;
-        d.reject({ error: errorText });
+        d.reject({ error: error.toString() });
       })
       .done();
 
@@ -102,9 +101,7 @@ EastMoney.prototype.parseReportContent = function (url) {
         }
       })
       .fail(function (error) {
-        console.log(error);
-        var errorText = error.name + ': ' + error.message;
-        d.reject({ error: errorText });
+        d.reject({ error: error.toString() });
       })
       .done();
 

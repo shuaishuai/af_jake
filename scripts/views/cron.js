@@ -194,7 +194,9 @@ function main(req, res) {
         textWarning(res, message.warning, _warningLog);
       }
     })
-    .fail()
+    .fail(function (errorText) {
+      textError(res, errorText);
+    })
     .done();
 }
 
