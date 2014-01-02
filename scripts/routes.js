@@ -18,11 +18,9 @@ function init(app) {
   app.get('/api/stockcode/filter', api.stockcode_filter);
 
   // cron
-  // app.get("/cron/eastmoney/report/list", never_cache, cron.eastmoney_report_list);
-  // app.get("/cron/eastmoney/report/content", never_cache, cron.eastmoney_report_content);
   app.get("/cron/parttime/ganji", never_cache, cron.parttime_ganji);
   app.get("/cron/price/au", never_cache, cron.price_au);
-  app.get("/cron", never_cache, cron.main);
+  app.get("/cron", never_cache, cron.index);
 
   // atom
   app.get("/feed/reports", feed.reports);
