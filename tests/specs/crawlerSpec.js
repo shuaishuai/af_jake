@@ -5,14 +5,9 @@ describe('domain.crawlers', function () {
     var Crawler = require('../../scripts/domain/crawlers/base'),
         c = new Crawler();
 
-    it('if not respond in 5000ms, timeout/fail it', function (done) {
-      this.timeout(7000);
+    it('if not respond after {timeout} in ms, fail it', function (done) {
       c
-        .get('http://www.facebook.com')
-        // .then(function (body) {
-        //   console.log(body);
-        //   done();
-        // })
+        .get('http://www.facebook.com', { timeout: 500 })
         .fail(function (EorW) {
           expect(EorW).to.be.a('string');
           done();
