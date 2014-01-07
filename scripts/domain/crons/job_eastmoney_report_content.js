@@ -15,32 +15,26 @@ module.exports = function () {
     }
   };
 
-  Report.find(query).success(function (report) {
-    if (report) {
-      em.parseReportContent(report.url)
-        .then(function (message) {
-          if ('warning' in message) {
-            report.destroy().success(function () {
-              d.resolve(message);
-            });
-          } else if ( 'success' in message) {
-            report.created = message.success.created;
-            report.content = message.success.content;
+  Report
+    .find(query)
+    .success(function (report) {
+      if (report) {
+        em.parseReportContent(report.url)
+          .then(function (data) {
+            report.created = data.created;
+            report.content = data.content;
             report.save().success(function () {
-              d.resolve({ success: 'report ' + report.id + ' updated' });
+              d.resolve('report ' + report.id + ' updated');
             });
-          } else {
-            d.reject('NotImplementedException');
-          }
-        })
-        .fail(function (message) {
-          d.reject(message.error);
-        })
-        .done();
-    } else {
-      d.resolve({ warning: 'no empty report' });
-    }
-  });
+          })
+          .fail(function (EorW) {
+            d.reject(EorW);
+          })
+          .done();
+      } else {
+        d.reject('no empty report');
+      }
+    });
 
   return d.promise;
 };

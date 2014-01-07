@@ -1,4 +1,5 @@
 var _ = require('lodash'),
+    q = require('q'),
     moment = require('moment');
 
 var KV = require('../domain/kv');
@@ -20,7 +21,28 @@ var _senders = require('./_senders'),
 var JOBS = {
   'bd1e98c0-6ddc-11e3-88e6-08002708e90e': require('../domain/crons/job_eastmoney_report_content'),
   '142c02ea-6ea2-11e3-b6f8-08002708e90e': require('../domain/crons/job_eastmoney_report_list'),
+  '8356d634-7453-11e3-9aaf-08002708e90e': require('../domain/crons/job_random_result'),
 };
+
+function _execJob(job) {
+  var d = q.defer();
+
+  if (job.uuid in JOBS) {
+    JOBS[job.uuid]()
+      .then(function (result) {
+        job.last_result = result;  // FIXME: should this be saved to db?
+        job.last_attempt = Date.now();
+        d.resolve(job);
+      })
+      .fail(function (EorW) {
+        d.reject(EorW);
+      });
+  } else {
+    d.reject(new Error('invalid job uuid'));
+  }
+
+  return d.promise;
+}
 
 function parttime_ganji(req, res) {
   gj.getJobList()
@@ -101,45 +123,36 @@ function price_au(req, res) {
     .done();
 }
 
-function index(req, res) {
-  CronTab.getJob()
+function index(req, res, next) {
+  CronTab
+    .getJob()
     .then(function (job) {
-      if (job) {
-        if (job.uuid in JOBS) {
-          JOBS[job.uuid]()
-            .then(function (message) {
-              job.last_attempt = Date.now();
-              job.save()
-                .success(function () {
-                  if ('warning' in message) {
-                    var _warningMsg = job.name + ', ' + message.warning + ', ' + req.get('user-agent');
-                    textWarning(res, _warningLog);
-                  } else if ('success' in message) {
-                    var _successLog = job.name + ', ' + message.success + ', ' + req.get('user-agent');
-                    textSuccess(res, _successLog);
-                  } else {
-                    textError(res, 'NotImplementedException');
-                  }
-                })
-                .error(function (error) {
-                  // FIXME: what is the error?
-                  console.log(error);
-                  textError(res, 'job.save');
-                });
-            })
-            .fail(function (errorText) {
-              textError(res, errorText);
-            })
-            .done();
-        } else {
-          textError(res, 'invalid job uuid');
-        }
-      } else {
-        var _warningMsg = job.name + ', no expired job, ' + req.get('user-agent');
-        textWarning(res, _warningLog);
-      }
+      return _execJob(job);
     })
-    .fail()
+    .then(function (job) {
+      job.save().success(function () {
+        res.locals.message = {
+          type: 'success',
+          text: job.name + ', ' + job.last_result,
+        };
+        next();
+      });
+    })
+    .fail(function (EorW) {
+      if (EorW instanceof Error) {
+        res.locals.message = {
+          type: 'error',
+          text: EorW.toString(),
+        };
+      } else {
+        res.locals.message = {
+          type: 'warning',
+          text: EorW,
+        };
+      }
+
+      next();
+    })
     .done();
 }
 

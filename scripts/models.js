@@ -100,7 +100,11 @@ var CronTab = sequelize.define('CronTab', {
             return expired <= now;
           });
 
-          d.resolve(job);
+          if (job) {
+            d.resolve(job);
+          } else {
+            d.reject('no expired job');
+          }
         });
 
       return d.promise;

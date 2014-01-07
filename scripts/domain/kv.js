@@ -26,7 +26,7 @@ module.exports = {
     return d.promise;
   },
 
-  set: function (key, value, callback) {
+  set: function (key, value, promiseResult) {
     var d = q.defer();
 
     var query = {
@@ -41,10 +41,14 @@ module.exports = {
           kv.value = value;
           kv.save()
             .success(function () {
-              d.resolve();
+              if (promiseResult) {
+                d.resolve(promiseResult);
+              } else {
+                d.resolve(true);
+              }
             })
             .error(function (error) {
-              d.reject('kv.save');
+              d.reject(error);
             });
         } else {
           d.reject('not found');

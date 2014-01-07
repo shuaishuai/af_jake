@@ -7,6 +7,9 @@ var basic = require('./views/basic'),
 var _headers = require('./views/_headers'),
     never_cache = _headers.never_cache;
 
+var _senders = require('./views/_senders'),
+    textSender = _senders.textSender;
+
 
 function init(app) {
   // basic
@@ -18,9 +21,9 @@ function init(app) {
   app.get('/api/stockcode/filter', api.stockcode_filter);
 
   // cron
-  app.get("/cron/parttime/ganji", never_cache, cron.parttime_ganji);
-  app.get("/cron/price/au", never_cache, cron.price_au);
-  app.get("/cron", never_cache, cron.index);
+  // app.get("/cron/parttime/ganji", never_cache, cron.parttime_ganji);
+  // app.get("/cron/price/au", never_cache, cron.price_au);
+  app.get("/cron", never_cache, cron.index, textSender);
 
   // atom
   app.get("/feed/reports", feed.reports);

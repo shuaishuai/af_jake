@@ -27,7 +27,7 @@ EastMoney.prototype.parseReportList = function (lastreport) {
           var buf = ic_gb2312_to_utf8.convert(body);
           html = buf.toString('utf-8');
         } catch (e) {
-          d.reject({ error: 'error converting' });
+          d.reject(new Error('error converting'));
         }
 
         // ** their typo
@@ -55,10 +55,10 @@ EastMoney.prototype.parseReportList = function (lastreport) {
           });
         }
 
-        d.resolve({ success: reportList });
+        d.resolve(reportList);
       })
       .fail(function (error) {
-        d.reject({ error: error.toString() });
+        d.reject(error);
       })
       .done();
 
@@ -75,7 +75,7 @@ EastMoney.prototype.parseReportContent = function (url) {
           var buf = ic_gb2312_to_utf8.convert(body);
           html = buf.toString('utf-8');
         } catch (e) {
-          d.reject({ error: 'error converting' });
+          d.reject(new Error('error converting'));
         }
 
         var $html = $(html);
@@ -93,15 +93,13 @@ EastMoney.prototype.parseReportContent = function (url) {
           }).join('\n');
 
           d.resolve({
-            success: {
-              created: created,
-              content: content
-            }
+            created: created,
+            content: content
           });
         }
       })
       .fail(function (error) {
-        d.reject({ error: error.toString() });
+        d.reject(error);
       })
       .done();
 
