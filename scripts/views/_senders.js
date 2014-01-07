@@ -33,8 +33,12 @@ function _textSender(req, res) {
   var message = res.locals.message;
   var logentries = res.locals.logentries;
 
+  var ua = req.get('user-agent');
+  if (ua.indexOf('mo-the-cron') > -1) {
+    ua = '@mo';
+  }
   if (!logentries) {
-    logentries = message.text + ', ' + req.get('user-agent');
+    logentries = message.text + ', ' + ua;
   }
 
   if (message.type === 'error') {
