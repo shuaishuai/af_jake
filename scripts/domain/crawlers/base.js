@@ -14,7 +14,7 @@ Crawler.prototype.get = function(url, options) {
   var d = q.defer();
 
   var _default_options = {
-    timeout: 30000,
+    timeout: 60000,
     encoding: null
   };
   if (options) {
