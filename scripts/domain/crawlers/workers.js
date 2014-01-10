@@ -68,8 +68,7 @@ OpenShift.prototype.get = function (url, options) {
 
 var jMe = new Me(),
     jOS = new OpenShift(),
-    balance = [ jMe,
-                     jOS, jOS, jOS, jOS, jOS, jOS, jOS ];
+    balance = [ jMe, jMe, jMe, jMe, jMe, jMe, jMe, jMe ];
     //          0    1    2    3    4    5    6    7
 
 
