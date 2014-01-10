@@ -4,17 +4,17 @@ var app = express();
 var salt = require('./scripts/config/salt');
 var env = require('./scripts/config/env');
 
-// ** to use dustjs-linkedin
-// https://github.com/chovy/express-template-demo/blob/master/demo/app.js
-var dust = require('dustjs-linkedin'),
-    cons = require('consolidate');
+// // ** to use dustjs-linkedin
+// // https://github.com/chovy/express-template-demo/blob/master/demo/app.js
+// var dust = require('dustjs-linkedin'),
+//     cons = require('consolidate');
 
-var dustHelpers = require('./scripts/domain/dust.helpers');
-dustHelpers.init(dust.helpers);
+// var dustHelpers = require('./scripts/domain/dust.helpers');
+// dustHelpers.init(dust.helpers);
 
-app.engine('dust', cons.dust);
-app.set('view engine', 'dust');
-app.set('views', __dirname + '/templates');
+// app.engine('dust', cons.dust);
+// app.set('view engine', 'dust');
+// app.set('views', __dirname + '/templates');
 
 // static folder
 app.use(express.static(__dirname + '/public'));
@@ -42,14 +42,15 @@ var server = require('./scripts/config/server').createServer(app);
 require('./scripts/routes').init(app);
 
 // error handling
-app.use(function(req, res, next){
-  res.status(404).render("errors/404.dust");
+app.use(function (req, res, next) {
+  res.status(404).send("404 Not Found :(");
 });
 
-app.use(function(err, req, res, next){
-  res.status(500).render("errors/500.dust", { err: err.stack });
+app.use(function (err, req, res, next) {
+  res.status(500).send(err.toString());
 });
 
 
-server.listen(process.env.VCAP_APP_PORT || 3000);
-console.log("server starts on port: " + (process.env.VCAP_APP_PORT || 3000));
+var port = process.env.VCAP_APP_PORT || 3000;
+server.listen(port);
+console.log("server starts on port %s", port);

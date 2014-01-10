@@ -1,11 +1,22 @@
+var request = require('request');
+
 function index(req, res) {
-  res.render('index.dust');
+  res.json({
+    name: "Jake on AppFog",
+    desc: "Hello, I'm Jake the Spider!",
+    author: "https://shuaishuai.github.io"
+  });
 }
 
-var KV = require('../domain/kv');
-
 function hello(req, res) {
-  res.json({ hello: 'world' });
+  request.get("http://www.google.com", {}, function (error, response, body) {
+    if (!error) {
+      res.send("Google is available");
+    } else {
+      console.log(error, response, body);
+      res.send(error.toString());
+    }
+  });
 }
 
 module.exports = {

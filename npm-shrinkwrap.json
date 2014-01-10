@@ -51,14 +51,8 @@
         }
       }
     },
-    "consolidate": {
-      "version": "0.10.0"
-    },
     "csv": {
       "version": "0.3.6"
-    },
-    "dustjs-linkedin": {
-      "version": "2.2.2"
     },
     "express": {
       "version": "3.4.7",
