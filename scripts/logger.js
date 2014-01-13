@@ -1,6 +1,7 @@
-var winston = require('winston');
+var nconf = require('nconf'),
+    winston = require('winston');
 
-var token = require('./config/env').logentries_token;
+var token = nconf.get('LOGENTRIES_TOKEN');
 if (token !== '') {
   var logentries = require('node-logentries');
   var log = logentries.logger({ token: token });

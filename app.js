@@ -1,8 +1,17 @@
+// ######## CONFIG BEGIN ########
+var nconf = require('nconf'),
+    os = require('os');
+
+nconf
+  .argv()
+  .env()
+  .file({ file: 'settings.json' });
+
+nconf.set('is_local', ['VirtualU'].indexOf(os.hostname()) > -1);
+// ######## CONFIG END ########
+
 var express = require('express');
 var app = express();
-
-var salt = require('./scripts/config/salt');
-var env = require('./scripts/config/env');
 
 // // ** to use dustjs-linkedin
 // // https://github.com/chovy/express-template-demo/blob/master/demo/app.js
@@ -20,20 +29,20 @@ var env = require('./scripts/config/env');
 app.use(express.static(__dirname + '/public'));
 
 // use
-var cookieParser = express.cookieParser(salt.cookie_salt); // signedCookieParser
+var cookieParser = express.cookieParser(nconf.get('cookie_salt')); // signedCookieParser
 app.use(cookieParser);
 
-var sessionStore = require('./scripts/config/session').getSessionStore();
 app.use(express.session({
-  secret: salt.cookie_salt,
-  key: salt.session_key,
-  store: sessionStore
+  secret: nconf.get('cookie_salt'),
+  key: nconf.get('session_key'),
+  store: new express.session.MemoryStore(),
 }));
+
 // app.use(express.logger());
 // app.use(express.bodyParser());
 
 // Server
-var server = require('./scripts/config/server').createServer(app);
+var server = require('http').createServer(app);
 
 // Socket.IO
 // var io = require('./scripts/io').createSocket(server, sessionStore, cookieParser);
@@ -51,6 +60,6 @@ app.use(function (err, req, res, next) {
 });
 
 
-var port = process.env.VCAP_APP_PORT || 3000;
+var port = nconf.get('VCAP_APP_PORT') || 3000;
 server.listen(port);
 console.log("server starts on port %s", port);

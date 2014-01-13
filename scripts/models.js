@@ -1,9 +1,22 @@
+var nconf = require('nconf'),
+    util = require('util');
+
+var mysql_config = "";
+if (nconf.get('is_local')) {
+  var db = nconf.get('database');
+  mysql_config = util.format('mysql://%s:%s@%s/%s', db.username, db.password, db.hostname, db.name);
+} else {
+  var services = JSON.parse(nconf.get('VCAP_SERVICES'));
+  var c = services['mysql-5.1'][0].credentials;
+  mysql_config = util.format('mysql://%s:%s@%s/%s', c.username, c.password, c.hostname, c.name);
+}
+// console.log(mysql_config);
+
 var _ = require('lodash'),
     q = require('q'),
     moment = require('moment');
 
 var Sequelize = require("sequelize"),
-    mysql_config = require('./config/env').mysql_config,
     sequelize = new Sequelize(mysql_config, { logging: false });
 
 // ** always order by `id`, `created` is not reliable

@@ -398,6 +398,28 @@
           "version": "0.0.7"
         }
       }
+    },
+    "nconf": {
+      "version": "0.6.9",
+      "dependencies": {
+        "async": {
+          "version": "0.2.9"
+        },
+        "ini": {
+          "version": "1.1.0"
+        },
+        "optimist": {
+          "version": "0.6.0",
+          "dependencies": {
+            "wordwrap": {
+              "version": "0.0.2"
+            },
+            "minimist": {
+              "version": "0.0.5"
+            }
+          }
+        }
+      }
     }
   }
 }
