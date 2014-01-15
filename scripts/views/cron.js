@@ -19,8 +19,12 @@ var _senders = require('./_senders'),
     textError = _senders.textError;
 
 var JOBS = {
-  'bd1e98c0-6ddc-11e3-88e6-08002708e90e': require('../domain/crons/job_eastmoney_report_content'),
   '142c02ea-6ea2-11e3-b6f8-08002708e90e': require('../domain/crons/job_eastmoney_report_list'),
+  'bd1e98c0-6ddc-11e3-88e6-08002708e90e': require('../domain/crons/job_eastmoney_report_content'),
+
+  '26e656b4-7dc1-11e3-b5a1-08002708e90e': require('../domain/crons/job_parttime_ganji_list'),
+  '424b83e0-7dc9-11e3-a491-08002708e90e': require('../domain/crons/job_parttime_ganji_content'),
+
   '8356d634-7453-11e3-9aaf-08002708e90e': require('../domain/crons/job_random_result'),
 };
 
@@ -42,25 +46,6 @@ function _execJob(job) {
   }
 
   return d.promise;
-}
-
-function parttime_ganji(req, res) {
-  gj.getJobList()
-    .then(function (message) {
-      if ('warning' in message) {
-        textWarning(res, message.warning);
-      } else if ('success' in message) {
-        var job_list = message.success;
-        var _successLog = '/c/p/g: ' + req.get('user-agent');
-        textSuccess(res, 'success', _successLog);
-      } else {
-        textWarning(res, 'NotImplementedException');
-      }
-    })
-    .fail(function (message) {
-      textError(res, message.error);
-    })
-    .done();
 }
 
 function price_au(req, res) {
@@ -156,8 +141,8 @@ function index(req, res, next) {
     .done();
 }
 
+
 module.exports = {
-  parttime_ganji: parttime_ganji,
   price_au: price_au,
   index: index,
 };

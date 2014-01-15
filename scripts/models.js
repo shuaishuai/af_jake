@@ -31,6 +31,17 @@ var Report = sequelize.define('Report', {
   flag: { type: Sequelize.INTEGER, defaultValue: 1 }, // 1: unread, 2: read, 3: star
 }, { timestamps: false, tableName: 'report' });
 
+var Parttime = sequelize.define('Parttime', {
+  id: Sequelize.INTEGER,
+  created: Sequelize.DATE,
+  // code: Sequelize.INTEGER,
+  // name: Sequelize.STRING(31),
+  url: Sequelize.STRING(255),
+  // title: Sequelize.STRING(255),
+  content: { type: Sequelize.TEXT, defaultValue: 'EMPTY' },
+  // flag: { type: Sequelize.INTEGER, defaultValue: 1 },
+}, { timestamps: false, tableName: 'parttime' });
+
 
 var KV = sequelize.define('KV', {
   id: Sequelize.INTEGER,
@@ -127,6 +138,7 @@ var CronTab = sequelize.define('CronTab', {
 
 module.exports = {
   Report: Report,
+  Parttime: Parttime,
   KV: KV,
   StockCode: StockCode,
   Price: Price,

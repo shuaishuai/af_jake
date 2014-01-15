@@ -1,5 +1,6 @@
-var q = require('q'),
-    $ = require('cheerio');
+var q = require('q');
+var $ = require('cheerio');
+var moment = require('moment');
 
 var Crawler = require('./base.js');
 
@@ -9,7 +10,7 @@ var Ganji = function () {
 
 Ganji.prototype = new Crawler();
 
-Ganji.prototype.getJobList = function () {
+Ganji.prototype.parseJobList = function (last_job) {
   var d = q.defer();
 
   var host = "http://sh.ganji.com";
@@ -18,17 +19,50 @@ Ganji.prototype.getJobList = function () {
   this.get(url, { encoding: 'utf-8'} )
       .then(function (body) {
         var $html = $(body);
-        var job_list = $html.find('.job-list').map(function () {
-          var $dl = $(this);
-          var $a = $dl.find('dt a');
+        var $dlList = $html.find('.job-list');
 
-          return {
-            created: $dl.attr('pt'),
-            url: host + $a.attr('href')
-          };
+        var jobList = [];
+        var $dl, $a, href, created;
+        for (var i = 0; i < $dlList.length; i++) {
+          $dl = $dlList.eq(i);
+          $a = $dl.find('dt a');
+
+          href = host + $a.attr('href');
+
+          if (href === last_job) {
+            break;
+          }
+
+          jobList.push({
+            created: moment.unix($dl.attr('pt')).format(),
+            url: href,
+          });
+        }
+
+        d.resolve(jobList);
+      })
+      .fail(function (error) {
+        d.reject(error);
+      })
+      .done();
+
+  return d.promise;
+};
+
+Ganji.prototype.parseJobContent = function (url) {
+  var d = q.defer();
+
+  this.get(url)
+      .then(function (body) {
+        var html = body.toString();
+
+        var $html = $(html);
+        // var errText = $html.find(".errText");
+        var $content = $html.find('.deta-Corp');
+
+        d.resolve({
+          content: $content.text().trim(),
         });
-
-        d.resolve({ success: job_list });
       })
       .fail(function (error) {
         d.reject(error);
