@@ -10,6 +10,7 @@ if (nconf.get('is_local')) {
   var c = services['mysql-5.1'][0].credentials;
   mysql_config = util.format('mysql://%s:%s@%s/%s', c.username, c.password, c.hostname, c.name);
 }
+// var mysql_config = 'mysql://root:654321@localhost/af_asimov';
 // console.log(mysql_config);
 
 var _ = require('lodash'),
@@ -123,6 +124,14 @@ var CronTab = sequelize.define('CronTab', {
             var expired = c.last_attempt + c.interval;
             return expired <= now;
           });
+
+          // var winston = require('./logger');
+          // winston.info(now);
+          // winston.info(ct[0].last_attempt + ' ' + ct[0].name);
+          // winston.info(ct[1].last_attempt + ' ' + ct[1].name);
+          // winston.info(ct[2].last_attempt + ' ' + ct[2].name);
+          // winston.info(ct[3].last_attempt + ' ' + ct[3].name);
+          // winston.info(job.last_attempt + ' ' + job.name);
 
           if (job) {
             d.resolve(job);

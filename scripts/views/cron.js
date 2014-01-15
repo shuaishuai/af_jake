@@ -39,7 +39,18 @@ function _execJob(job) {
         d.resolve(job);
       })
       .fail(function (EorW) {
-        d.reject(EorW);
+        if (EorW instanceof Error) {
+          d.reject(EorW);
+        } else {
+          // FIXME: Class CrobJob
+          if (EorW.substring(0, 3) === 'no ') {
+            job.last_result = EorW;  // FIXME: should this be saved to db?
+            job.last_attempt = Date.now();
+            d.resolve(job);
+          } else {
+            d.reject(EorW);
+          }
+        }
       });
   } else {
     d.reject(new Error('invalid job uuid'));
