@@ -34,12 +34,9 @@ var Report = sequelize.define('Report', {
 var Parttime = sequelize.define('Parttime', {
   id: Sequelize.INTEGER,
   created: Sequelize.DATE,
-  // code: Sequelize.INTEGER,
-  // name: Sequelize.STRING(31),
   url: Sequelize.STRING(255),
-  // title: Sequelize.STRING(255),
+  title: { type: Sequelize.STRING(255), defaultValue: 'EMPTY' },
   content: { type: Sequelize.TEXT, defaultValue: 'EMPTY' },
-  // flag: { type: Sequelize.INTEGER, defaultValue: 1 },
 }, { timestamps: false, tableName: 'parttime' });
 
 

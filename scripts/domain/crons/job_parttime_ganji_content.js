@@ -22,6 +22,7 @@ module.exports = function () {
       if (job) {
         gj.parseJobContent(job.url)
           .then(function (data) {
+            job.title = data.title;
             job.content = data.content;
             job.save().success(function () {
               d.resolve('job ' + job.id + ' updated');

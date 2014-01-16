@@ -58,9 +58,11 @@ Ganji.prototype.parseJobContent = function (url) {
 
         var $html = $(html);
         // var errText = $html.find(".errText");
+        var $title = $html.find('h1');
         var $content = $html.find('.deta-Corp');
 
         d.resolve({
+          title: $title.text().trim(),
           content: $content.text().trim(),
         });
       })
