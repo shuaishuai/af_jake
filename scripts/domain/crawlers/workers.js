@@ -13,7 +13,7 @@ Me.prototype.get = function (url, options) {
   var d = q.defer();
 
   request.get(url, options, function (error, response, body) {
-    if (!error && response.statusCode === 200) {
+    if (!error) {
       d.resolve(body);
     } else if (_isTimeoutError(error)) {
       d.reject('Me timeout: ' + url);
@@ -36,7 +36,7 @@ OpenShift.prototype.get = function (url, options) {
   // var u = 'http://127.0.0.1:3001/crawler?url=' + encodeURIComponent(url);
 
   request.get(u, options, function (error, response, body) {
-    if (!error && response.statusCode === 200) {
+    if (!error) {
       if (body === 'timeout') {
         d.reject('OpenShift timeout: ' + url);
       } else {

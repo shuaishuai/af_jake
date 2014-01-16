@@ -21,7 +21,7 @@ function init(app) {
   app.get('/api/stockcode/filter', api.stockcode_filter);
 
   // cron
-  app.get("/cron/price/au", never_cache, cron.price_au);
+  // app.get("/cron/price/au", never_cache, cron.price_au);
   app.get("/cron", never_cache, cron.index, textSender);
 
   // atom
