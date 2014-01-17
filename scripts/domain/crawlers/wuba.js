@@ -4,39 +4,36 @@ var moment = require('moment');
 
 var Crawler = require('./base.js');
 
-var Ganji = function () {
+var Wuba = function () {
   return this;
 };
 
-Ganji.prototype = new Crawler();
+Wuba.prototype = new Crawler();
 
-Ganji.prototype.parseJobList = function (last_job) {
-  var host = "http://sh.ganji.com";
-  var url = host + "/jzwangzhanjianshe/";
+Wuba.prototype.parseJobList = function (last_job) {
+  var url = "http://sh.58.com/jisuanjiwl/";
 
   return this
-    .get(url, { encoding: 'utf-8'} )
+    .get(url, { encoding: 'utf-8'})
     .then(function (body) {
       var d = q.defer();
 
       var $html = $(body);
-      var $dlList = $html.find('.job-list');
+      var $dlList = $html.find('.infolist dl');
 
       var jobList = [];
-      var $dl, $a, href, created;
+      var $dl, href;
       for (var i = 0; i < $dlList.length; i++) {
         $dl = $dlList.eq(i);
-        $a = $dl.find('dt a');
 
-        href = host + $a.attr('href');
+        href = $dl.find('dt a').attr('href');
 
         if (href === last_job) {
           break;
         }
 
         jobList.push({
-          source: 'ganji',
-          created: moment.unix($dl.attr('pt')).format(),
+          source: 'wuba',
           url: href,
         });
       }
@@ -51,7 +48,7 @@ Ganji.prototype.parseJobList = function (last_job) {
     });
 };
 
-Ganji.prototype.parseJobContent = function (url) {
+Wuba.prototype.parseJobContent = function (url) {
   var d = q.defer();
 
   this.get(url)
@@ -60,11 +57,13 @@ Ganji.prototype.parseJobContent = function (url) {
 
         var $html = $(html);
         // var errText = $html.find(".errText");
-        var $title = $html.find('h1');
-        var $content = $html.find('.deta-Corp');
+        var $header = $html.find('.leftbar');
+        var $content = $html.find('#zhiwei');
 
         d.resolve({
-          title: $title.text().trim(),
+          source: 'wuba',
+          created: $header.find('.timeD').text().trim(),
+          title: $header.find('h1').text().trim(),
           content: $content.text().trim(),
         });
       })
@@ -76,5 +75,4 @@ Ganji.prototype.parseJobContent = function (url) {
   return d.promise;
 };
 
-
-module.exports = Ganji;
+module.exports = Wuba;

@@ -51,7 +51,7 @@ module.exports = {
               d.reject(error);
             });
         } else {
-          d.reject('not found');
+          d.reject('key not found');
         }
       });
 

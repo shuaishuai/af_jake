@@ -23,6 +23,7 @@ function init(app) {
   // cron
   // app.get("/cron/price/au", never_cache, cron.price_au);
   app.get("/cron", never_cache, cron.index, textSender);
+  // app.get("/cron/wuba", never_cache, cron.wuba, textSender);
 
   // atom
   app.get("/feed/reports", feed.reports);

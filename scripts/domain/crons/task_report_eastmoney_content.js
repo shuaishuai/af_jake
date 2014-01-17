@@ -6,8 +6,13 @@ var models = require('../../models'),
 var EastMoney = require('../crawlers/eastmoney'),
     em = new EastMoney();
 
-module.exports = function () {
-  var d = q.defer();
+
+function ReportContent() {}
+var Task = require('./task');
+ReportContent.prototype = new Task();
+
+ReportContent.prototype.do = function () {
+  var that = this;
 
   var query = {
     where: {
@@ -19,22 +24,23 @@ module.exports = function () {
     .find(query)
     .success(function (report) {
       if (report) {
-        em.parseReportContent(report.url)
+        em
+          .parseReportContent(report.url)
           .then(function (data) {
             report.created = data.created;
             report.content = data.content;
             report.save().success(function () {
-              d.resolve('report ' + report.id + ' updated');
+              that.emit('success', '::' + report.id + ' updated');
             });
           })
-          .fail(function (EorW) {
-            d.reject(EorW);
+          .fail(function (error) {
+            that.emit('error', error);
           })
           .done();
       } else {
-        d.reject('no empty report');
+        that.emit('delay', 'no empty report');
       }
     });
-
-  return d.promise;
 };
+
+module.exports = new ReportContent();

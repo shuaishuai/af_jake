@@ -55,12 +55,12 @@ EastMoney.prototype.parseReportList = function (lastreport) {
           });
         }
 
-        d.resolve(reportList);
-      })
-      .fail(function (error) {
-        d.reject(error);
-      })
-      .done();
+        if (reportList.length === 0) {
+          d.reject('nothing');
+        } else {
+          d.resolve(reportList);
+        }
+      });
 
   return d.promise;
 };
