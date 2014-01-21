@@ -61,6 +61,25 @@ function _getTask(uuid) {
   return d.promise;
 }
 
+function _delayMore(interval, last_delay) {
+  var y0 = 0.8; // magic
+  var a = -2 / interval * Math.log( 2 / (y0 + 1) - 1);
+
+  var y = 2 / (1 + Math.pow(Math.E, -a * last_delay)) - 1;
+
+  var delay = y * interval;
+
+  if (delay < 1000) { // use 1 s as the least interval
+    return 1000;
+  } else {
+    return delay;
+  }
+}
+
+function _delayLess(last_delay) {
+  return last_delay * 0.618;
+}
+
 function CronJob() {
   var d = q.defer();
 
@@ -73,9 +92,7 @@ function CronJob() {
     .then(function (task) {
       task.on('success', function (result) {
         job.last_attempt = Date.now();
-        if (job.delay > 0) {
-          job.delay = job.delay * 0.618;
-        }
+        job.delay = _delayLess(job.delay);
 
         job.save().success(function () {
           d.resolve(util.format('%s %s', job.name, result));
@@ -84,11 +101,7 @@ function CronJob() {
 
       task.on('delay', function (result) {
         job.last_attempt = Date.now();
-        if (job.delay === 0) {
-          job.delay += job.interval * 0.618;
-        } else {
-          job.delay = job.delay * 1.618;
-        }
+        job.delay = _delayMore(job.interval, job.delay);
 
         job.save().success(function () {
           d.resolve(util.format('%s delayed: %s', job.name, result));
