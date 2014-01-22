@@ -1,5 +1,7 @@
-var nconf = require('nconf'),
-    util = require('util');
+var mysql = require('mysql');
+var nconf = require('nconf');
+var util = require('util');
+
 
 var mysql_config = "";
 if (nconf.get('is_local')) {
@@ -11,6 +13,7 @@ if (nconf.get('is_local')) {
   mysql_config = util.format('mysql://%s:%s@%s/%s', c.username, c.password, c.hostname, c.name);
 }
 // var mysql_config = 'mysql://root:654321@localhost/af_asimov';
+var raw_conn = mysql.createConnection(mysql_config);
 
 var _ = require('lodash'),
     q = require('q'),
@@ -102,48 +105,10 @@ var CronTab = sequelize.define('CronTab', {
   interval: Sequelize.INTEGER, // FIXME: 'key' is a MySQL reserved keyword
   delay: Sequelize.INTEGER,
   last_attempt: Sequelize.BIGINT, // Date.now(), utc timestamp
-}, { timestamps: false, tableName: 'cron_tab',
-  classMethods: {
-    getJob: function () {
-      var d = q.defer();
-
-      var query = {
-        where: {
-          active: 1,
-        },
-        order: 'last_attempt',
-      };
-
-      this.findAll(query)
-        .success(function (ct) {
-          var now = Date.now();
-
-          var job = _.find(ct, function (c) {
-            var expired = c.last_attempt + c.interval;
-            return expired <= now;
-          });
-
-          // var winston = require('./logger');
-          // winston.info(now);
-          // winston.info(ct[0].last_attempt + ' ' + ct[0].name);
-          // winston.info(ct[1].last_attempt + ' ' + ct[1].name);
-          // winston.info(ct[2].last_attempt + ' ' + ct[2].name);
-          // winston.info(ct[3].last_attempt + ' ' + ct[3].name);
-          // winston.info(job.last_attempt + ' ' + job.name);
-
-          if (job) {
-            d.resolve(job);
-          } else {
-            d.reject('no expired job');
-          }
-        });
-
-      return d.promise;
-    }
-  },
-});
+}, { timestamps: false, tableName: 'cron_tab' });
 
 module.exports = {
+  raw_conn: raw_conn,
   Report: Report,
   Parttime: Parttime,
   KV: KV,
