@@ -57,13 +57,16 @@ Baixing.prototype.parseJobContent = function (url) {
 
         var $html = $(html);
         // var errText = $html.find(".errText");
-        var $header = $html.find('.leftbar');
-        var $content = $html.find('#zhiwei');
+        var $title = $html.find('.viewad-title');
+        var $content = $html.find('.viewad-descript').next();
+        var $meta = $html.find('.viewad-meta');
+
+        var created = $meta.find('.action').next().text().trim();
 
         d.resolve({
-          source: 'wuba',
-          created: $header.find('.timeD').text().trim(),
-          title: $header.find('h1').text().trim(),
+          source: 'baixing',
+          created: moment(created, "MM月DD日 HH:mm").format(),
+          title: $title.text().trim(),
           content: $content.text().trim(),
         });
       })

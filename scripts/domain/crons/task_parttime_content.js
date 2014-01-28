@@ -3,18 +3,11 @@ var q = require('q');
 var models = require('../../models');
 var Parttime = models.Parttime;
 
-var Wuba = require('../crawlers/wuba');
-var wb = new Wuba();
-var Ganji = require('../crawlers/ganji');
-var gj = new Ganji();
-
-
-function ParttimeContent() { }
 var Task = require('./task');
-ParttimeContent.prototype = new Task();
+var task = new Task();
 
 
-ParttimeContent.prototype.do = function () {
+task.do = function () {
   var that = this;
 
   var query = {
@@ -27,12 +20,10 @@ ParttimeContent.prototype.do = function () {
     .find(query)
     .success(function (pt) {
       if (pt) {
-        var task = {
-          'ganji': gj,
-          'wuba': wb,
-        }[pt.source];
+        var Crawler = require('../crawlers/' + pt.source);
+        var crawler = new Crawler();
 
-        task
+        crawler
           .parseJobContent(pt.url)
           .then(function (data) {
             if (data.created) { pt.created = data.created; }
@@ -54,4 +45,4 @@ ParttimeContent.prototype.do = function () {
 };
 
 
-module.exports = new ParttimeContent();
+module.exports = task;
