@@ -17,6 +17,9 @@ CrawlerFactory.prototype.parseList = function (last_item_key, crawler, Model, th
       return crawler.parseList(last_item);
     })
     .then(function (item_list) {
+      var winston = require('../../logger');
+      winston.warn(item_list);
+
       return Model.bulkCreate(item_list);
     })
     .then(function (item_list) {

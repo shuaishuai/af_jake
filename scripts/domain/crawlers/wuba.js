@@ -10,7 +10,7 @@ var Wuba = function () {
 
 Wuba.prototype = new Crawler();
 
-Wuba.prototype.parseJobList = function (last_job) {
+Wuba.prototype.parseList = function (last_job) {
   var url = "http://sh.58.com/jisuanjiwl/";
 
   return this

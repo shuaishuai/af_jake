@@ -10,7 +10,7 @@ var Ganji = function () {
 
 Ganji.prototype = new Crawler();
 
-Ganji.prototype.parseJobList = function (last_job) {
+Ganji.prototype.parseList = function (last_job) {
   var host = "http://sh.ganji.com";
   var url = host + "/jzwangzhanjianshe/";
 
