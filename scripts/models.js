@@ -13,7 +13,6 @@ if (nconf.get('is_local')) {
   mysql_config = util.format('mysql://%s:%s@%s/%s', c.username, c.password, c.hostname, c.name);
 }
 // var mysql_config = 'mysql://root:654321@localhost/af_asimov';
-var raw_conn = mysql.createConnection(mysql_config);
 
 var _ = require('lodash'),
     q = require('q'),
@@ -108,7 +107,10 @@ var CronTab = sequelize.define('CronTab', {
 }, { timestamps: false, tableName: 'cron_tab' });
 
 module.exports = {
-  raw_conn: raw_conn,
+  raw_conn: function () {
+    return mysql.createConnection(mysql_config);
+  },
+  sequelize: sequelize,
   Report: Report,
   Parttime: Parttime,
   KV: KV,

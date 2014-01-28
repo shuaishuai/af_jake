@@ -1,11 +1,11 @@
 var q = require('q');
 
 var models = require('../../models');
+var sequelize = models.sequelize;
 var raw_conn = models.raw_conn;
 
-function RemoveDuplicate() { }
 var Task = require('./task');
-RemoveDuplicate.prototype = new Task();
+var task = new Task();
 
 var sql_parttime = [
   "DELETE FROM parttime WHERE id NOT IN",
@@ -21,10 +21,12 @@ var sql_parttime = [
 ].join(" ");
 
 
-RemoveDuplicate.prototype.do = function () {
+task.do = function () {
   var that = this;
 
-  raw_conn.query(sql_parttime, function (error, result) {
+  var conn = raw_conn();
+
+  conn.query(sql_parttime, function (error, result) {
     if (error) {
       that.emit('error', error);
     } else {
@@ -35,8 +37,8 @@ RemoveDuplicate.prototype.do = function () {
       }
     }
   });
-  raw_conn.end();
+  conn.end();
 };
 
 
-module.exports = new RemoveDuplicate();
+module.exports = task;
