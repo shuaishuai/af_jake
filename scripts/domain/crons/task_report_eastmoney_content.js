@@ -34,7 +34,17 @@ ReportContent.prototype.do = function () {
             });
           })
           .fail(function (error) {
-            that.emit('error', error);
+            if (typeof error === 'string') {
+              if (error === '404') {
+                pt.destroy().success(function () {
+                  that.emit('error', error);
+                });
+              } else {
+                that.emit('error', error);
+              }
+            } else {
+              that.emit('error', error);
+            }
           })
           .done();
       } else {

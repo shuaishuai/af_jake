@@ -10,7 +10,7 @@ Me.prototype.get = function (url, options) {
   request.get(url, options, function (error, response, body) {
     if (!error) {
       if (response.statusCode === 404) {
-        d.reject(404);
+        d.reject('404');
       } else if (response.statusCode === 200) {
         d.resolve(body);
       } else {
