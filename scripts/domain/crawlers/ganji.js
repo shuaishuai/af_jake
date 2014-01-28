@@ -1,6 +1,5 @@
 var q = require('q');
 var $ = require('cheerio');
-var moment = require('moment');
 
 var Crawler = require('./base.js');
 
@@ -36,7 +35,6 @@ Ganji.prototype.parseList = function (last_job) {
 
         jobList.push({
           source: 'ganji',
-          created: moment.unix($dl.attr('pt')).format(),
           url: href,
         });
       }
