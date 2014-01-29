@@ -1,7 +1,5 @@
 var q = require('q');
 
-var KV = require('../kv');
-
 var models = require('../../models');
 var Parttime = models.Parttime;
 

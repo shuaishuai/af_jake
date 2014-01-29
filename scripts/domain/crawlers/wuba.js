@@ -10,41 +10,27 @@ var Wuba = function () {
 
 Wuba.prototype = new Crawler();
 
-Wuba.prototype.parseList = function (last_job) {
+Wuba.prototype.parseList = function (last_items) {
   var url = "http://sh.58.com/jisuanjiwl/";
 
   return this
     .get(url, { encoding: 'utf-8'})
     .then(function (body) {
-      var d = q.defer();
-
       var $html = $(body);
       var $dlList = $html.find('.infolist dl');
 
-      var jobList = [];
+      var all_items = [];
       var $dl, href;
       for (var i = 0; i < $dlList.length; i++) {
         $dl = $dlList.eq(i);
-
         href = $dl.find('dt a').attr('href');
-
-        if (href === last_job) {
-          break;
-        }
-
-        jobList.push({
+        all_items.push({
           source: 'wuba',
           url: href,
         });
       }
 
-      if (jobList.length === 0) {
-        d.reject('nothing');
-      } else {
-        d.resolve(jobList);
-      }
-
-      return d.promise;
+      return Crawler.filterNewItems(all_items, last_items, 'url');
     });
 };
 

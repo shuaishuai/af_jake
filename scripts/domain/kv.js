@@ -10,14 +10,14 @@ module.exports = {
 
     var query = {
       where: {
-        key: key,
+        name: key,
       }
     };
 
     KV.find(query)
       .success(function (kv) {
         if (kv) {
-          d.resolve(kv.value);
+          d.resolve(JSON.parse(kv.value));
         } else {
           d.reject('not found');
         }
@@ -31,14 +31,14 @@ module.exports = {
 
     var query = {
       where: {
-        key: key,
+        name: key,
       }
     };
 
     KV.find(query)
       .success(function (kv) {
         if (kv) {
-          kv.value = value;
+          kv.value = JSON.stringify(value);
           kv.save()
             .success(function () {
               if (promiseResult) {

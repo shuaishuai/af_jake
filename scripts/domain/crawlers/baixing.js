@@ -10,7 +10,7 @@ var Baixing = function () {
 
 Baixing.prototype = new Crawler();
 
-Baixing.prototype.parseList = function (last_job) {
+Baixing.prototype.parseList = function (last_items) {
   var url = "http://shanghai.baixing.com/shejijianzhi/";
 
   return this
@@ -21,31 +21,20 @@ Baixing.prototype.parseList = function (last_job) {
       var $html = $(body);
       var $list = $html.find('#normal-list ul li');
 
-      var jobList = [];
-      var $li, href;
+      var all_items = [];
+      var $li;
+      var href;
       for (var i = 0; i < $list.length; i++) {
         $li = $list.eq(i);
-
         href = $li.find('a').attr('href');
-
-        if (href === last_job) {
-          break;
-        }
-
-        jobList.push({
+        all_items.push({
           source: 'baixing',
           url: href,
         });
       }
 
-      if (jobList.length === 0) {
-        d.reject('nothing');
-      } else {
-        d.resolve(jobList);
-      }
-
-      return d.promise;
-    });
+      return Crawler.filterNewItems(all_items, last_items, 'url');
+    })
 };
 
 Baixing.prototype.parseJobContent = function (url) {

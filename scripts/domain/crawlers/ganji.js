@@ -1,5 +1,6 @@
 var q = require('q');
 var $ = require('cheerio');
+var moment = require('moment');
 
 var Crawler = require('./base.js');
 
@@ -9,43 +10,30 @@ var Ganji = function () {
 
 Ganji.prototype = new Crawler();
 
-Ganji.prototype.parseList = function (last_job) {
+Ganji.prototype.parseList = function (last_items) {
   var host = "http://sh.ganji.com";
   var url = host + "/jzwangzhanjianshe/";
 
   return this
     .get(url, { encoding: 'utf-8'} )
     .then(function (body) {
-      var d = q.defer();
-
       var $html = $(body);
       var $dlList = $html.find('.job-list');
 
-      var jobList = [];
-      var $dl, $a, href, created;
+      var all_items = [];
+      var $dl, href;
       for (var i = 0; i < $dlList.length; i++) {
         $dl = $dlList.eq(i);
-        $a = $dl.find('dt a');
 
-        href = host + $a.attr('href');
+        href = host + $dl.find('dt a').attr('href');
 
-        if (href === last_job) {
-          break;
-        }
-
-        jobList.push({
+        all_items.push({
           source: 'ganji',
           url: href,
         });
       }
 
-      if (jobList.length === 0) {
-        d.reject('nothing');
-      } else {
-        d.resolve(jobList);
-      }
-
-      return d.promise;
+      return Crawler.filterNewItems(all_items, last_items, 'url');
     });
 };
 
@@ -60,8 +48,11 @@ Ganji.prototype.parseJobContent = function (url) {
         // var errText = $html.find(".errText");
         var $title = $html.find('h1');
         var $content = $html.find('.deta-Corp');
+        var created = $html.find('.d-c-left-hear p .txt').text()
+                           .trim().substring(5);
 
         d.resolve({
+          created: moment('2014-' + created).format(),
           title: $title.text().trim(),
           content: $content.text().trim(),
         });

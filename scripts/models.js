@@ -46,8 +46,8 @@ var Parttime = sequelize.define('Parttime', {
 var KV = sequelize.define('KV', {
   id: Sequelize.INTEGER,
   updated: Sequelize.DATE,
-  key: Sequelize.STRING(63), // FIXME: 'key' is a MySQL reserved keyword
-  value: Sequelize.STRING(255),
+  name: Sequelize.STRING(63),
+  value: Sequelize.TEXT,
 }, { timestamps: false, tableName: 'kv' });
 
 

@@ -63,5 +63,36 @@ Crawler.prototype.get = function (url, options) {
   return worker.get(url, _default_options);
 };
 
+Crawler.filterNewItems = function (all_items, last_items, prop) {
+  var d = q.defer();
+
+  var items = [];
+  var item;
+  for (var i = 0; i < all_items.length; i++) {
+    item = all_items[i];
+
+    if (last_items.indexOf(item[prop]) > -1) {
+      break;
+    }
+
+    items.push(item);
+  }
+
+  var new_last_items = _.map(all_items, function (item) {
+    return item[prop];
+  });
+
+  if (items.length === 0) {
+    d.reject('nothing');
+  } else {
+    d.resolve({
+      items: items,
+      last_items: new_last_items,
+    });
+  }
+
+  return d.promise;
+};
+
 
 module.exports = Crawler;

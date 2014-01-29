@@ -10,24 +10,26 @@ function CrawlerFactory() {
 CrawlerFactory.prototype.name = "CrawlerFactory";
 
 
-CrawlerFactory.prototype.parseList = function (last_item_key, crawler, Model, that) {
+CrawlerFactory.prototype.parseList = function (last_items_key, crawler, Model, that) {
   KV
-    .get(last_item_key)
-    .then(function (last_item) {
-      return crawler.parseList(last_item);
+    .get(last_items_key)
+    .then(function (last_items) {
+      return crawler.parseList(last_items);
     })
-    .then(function (item_list) {
-      var winston = require('../../logger');
-      winston.warn(item_list);
+    .then(function (result) {
+      var items = result.items;
+      var last_items = result.last_items;
 
-      return Model.bulkCreate(item_list);
+      return KV.set(last_items_key, last_items, items);
     })
-    .then(function (item_list) {
-      var last_item = item_list[0].url;
-      return KV.set(last_item_key, last_item, item_list.length);
+    .then(function (items) {
+      // var winston = require('../../logger');
+      // winston.warn(item_list);
+
+      return Model.bulkCreate(items);
     })
-    .then(function (item_list_length) {
-      that.emit('success', item_list_length + ' new items');
+    .then(function (items) {
+      that.emit('success', items.length + ' new items');
     })
     .fail(function (error) {
       if (typeof error === 'string') {
