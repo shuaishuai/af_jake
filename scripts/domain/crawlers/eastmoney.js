@@ -6,7 +6,7 @@ var q = require('q'),
 var iconv = require('iconv'),
     ic_gb2312_to_utf8 = new iconv.Iconv('gb2312', 'utf-8//IGNORE');
 
-var Crawler = require('./base.js');
+var Crawler = require('../../libs/crawler').Crawler;
 
 var EastMoney = function () {
   return this;
@@ -14,21 +14,18 @@ var EastMoney = function () {
 
 EastMoney.prototype = new Crawler();
 
-EastMoney.prototype.parseReportList = function (lastreport) {
-  var d = q.defer();
-
+EastMoney.prototype.parseList = function (last_items) {
   var host = "http://data.eastmoney.com";
   var url = host + "/report/";
 
-  this.get(url)
+  return this
+      .get(url)
       .then(function (body) {
-        var html;
-        try {
-          var buf = ic_gb2312_to_utf8.convert(body);
-          html = buf.toString('utf-8');
-        } catch (e) {
-          d.reject(new Error('error converting'));
-        }
+        var d = q.defer();
+
+        // FIXME: try/catch
+        var buf = ic_gb2312_to_utf8.convert(body);
+        var html = buf.toString('utf-8');
 
         // ** their typo
         html = html.replace(/<\/a><\/td><\/div>/g, "</a></div></td>");
@@ -36,17 +33,13 @@ EastMoney.prototype.parseReportList = function (lastreport) {
         var $html = $(html);
         var $trList = $html.find('table#dt_1 tbody tr');
 
-        var reportList = [],
+        var all_items = [],
             $tdList;
         for (var i = 0; i < $trList.length; i++) {
           $tdList = $trList.eq(i).find('td');
           var href = host + $tdList.eq(5).find('a').attr('href');
 
-          if (href === lastreport) {
-            break;
-          }
-
-          reportList.push({
+          all_items.push({
             "created": $tdList.eq(1).find("span").attr("title"),
             "code": $tdList.eq(2).text(),
             "name": $tdList.eq(3).text(),
@@ -55,14 +48,8 @@ EastMoney.prototype.parseReportList = function (lastreport) {
           });
         }
 
-        if (reportList.length === 0) {
-          d.reject('nothing');
-        } else {
-          d.resolve(reportList);
-        }
+        return Crawler.filterNewItems(all_items, last_items, 'url');
       });
-
-  return d.promise;
 };
 
 EastMoney.prototype.parseReportContent = function (url) {

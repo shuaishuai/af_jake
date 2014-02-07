@@ -91,10 +91,17 @@ function index (req, res, next) {
     })
     .fail(function (error) {
       if (typeof error === 'string') {
-        res.locals.message = {
-          type: 'warning',
-          text: error,
-        };
+        if (error.substring(0, 8) === 'verbose,') {
+          res.locals.message = {
+            type: 'verbose',
+            text: error,
+          };
+        } else {
+          res.locals.message = {
+            type: 'warning',
+            text: error,
+          };
+        }
         next();
       } else {
         res.locals.message = {

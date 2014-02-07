@@ -2,7 +2,7 @@ var q = require('q');
 var $ = require('cheerio');
 var moment = require('moment');
 
-var Crawler = require('./base.js');
+var Crawler = require('../../libs/crawler').Crawler;
 
 var Ganji = function () {
   return this;

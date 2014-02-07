@@ -6,7 +6,7 @@ var Parttime = models.Parttime;
 var Ganji = require('../crawlers/ganji');
 var gj = new Ganji();
 
-var CrawlerFactory = require('../crawlers/factory');
+var CrawlerFactory = require('../../libs/crawler').CrawlerFactory;
 var cf = new CrawlerFactory();
 
 var Task = require('./task');

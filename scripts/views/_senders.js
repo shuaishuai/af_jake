@@ -45,6 +45,8 @@ function _textSender(req, res) {
     winston.error(logentries);
   } else if (message.type === 'warning') {
     winston.warn(logentries);
+  } else if (message.type === 'verbose') {
+    // winston.verbose
   } else if (message.type === 'success') {
     winston.info(logentries);
   } else {

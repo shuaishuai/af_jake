@@ -28,7 +28,8 @@ task.do = function () {
           .then(function (data) {
             if (data.created) { pt.created = data.created; }
             if (data.title) { pt.title = data.title; }
-            if (data.content) { pt.content = data.content; }
+
+            if (data.content) { pt.content = data.content; } else { throw('404'); }
 
             pt.save().success(function () {
               that.emit('success', '::' + pt.id + ' updated');

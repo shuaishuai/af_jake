@@ -30,7 +30,7 @@ function _getJob() {
       if (cronjob) {
         d.resolve(cronjob);
       } else {
-        d.reject('no expired cronjob');
+        d.reject('verbose, no expired cronjob');
       }
     });
 
@@ -39,7 +39,8 @@ function _getJob() {
 
 var REGISTERED = {
   '26e656b4-7dc1-11e3-b5a1-08002708e90e': './task_parttime_ganji_list',
-  'de032d98-7f3f-11e3-b0be-08002708e90e': './task_parttime_wuba_list',
+  'de032d98-7f3f-11e3-b0be-08002708e90e': './task_parttime_wuba1_list',
+  '450cb9d4-8fa6-11e3-a1d0-08002708e90e': './task_parttime_wuba2_list',
   'c88e92cf-87c9-11e3-b866-bc5ff444b3d5': './task_parttime_baixing_list',
   'd3cad59c-81a6-11e3-968b-08002708e90e': './task_parttime_content',
 

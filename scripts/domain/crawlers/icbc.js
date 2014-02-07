@@ -3,7 +3,7 @@ var q = require('q'),
     $ = require('cheerio'),
     moment = require('moment');
 
-var Crawler = require('./base.js');
+var Crawler = require('../../libs/crawler').Crawler;
 
 var ICBC = function () {
   return this;

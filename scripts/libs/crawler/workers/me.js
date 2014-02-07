@@ -27,7 +27,7 @@ Me.prototype.get = function (url, options) {
   });
 
   return d.promise;
-}
+};
 
 var me = new Me();
 

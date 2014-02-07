@@ -10,7 +10,7 @@ util.inherits(Task, events.EventEmitter);
 
 Task.prototype.do = function () {
   throw('Interface');
-}
+};
 
 
 module.exports = Task;

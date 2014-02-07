@@ -9,7 +9,7 @@
 
 module.exports = {
   isTimeout: function(error) {
-    return error.code === 'ETIMEDOUT'
-           || error.code === 'ESOCKETTIMEDOUT';
+    return error.code === 'ETIMEDOUT' ||
+           error.code === 'ESOCKETTIMEDOUT';
   }
 };

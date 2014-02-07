@@ -2,7 +2,7 @@ var q = require('q');
 var $ = require('cheerio');
 var moment = require('moment');
 
-var Crawler = require('./base.js');
+var Crawler = require('../../libs/crawler').Crawler;
 
 var Baixing = function () {
   return this;
@@ -16,8 +16,6 @@ Baixing.prototype.parseList = function (last_items) {
   return this
     .get(url, { encoding: 'utf-8'})
     .then(function (body) {
-      var d = q.defer();
-
       var $html = $(body);
       var $list = $html.find('#normal-list ul li');
 
@@ -34,7 +32,7 @@ Baixing.prototype.parseList = function (last_items) {
       }
 
       return Crawler.filterNewItems(all_items, last_items, 'url');
-    })
+    });
 };
 
 Baixing.prototype.parseJobContent = function (url) {
