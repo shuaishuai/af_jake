@@ -62,7 +62,7 @@ var StockCode = sequelize.define('StockCode', {
   is_new: Sequelize.INTEGER,
   is_broken: Sequelize.INTEGER,
   is_hs300: Sequelize.INTEGER,
-  is_jqka: Sequelize.INTEGER,
+  jqka_score: Sequelize.DECIMAL(2, 1),
 }, { timestamps: false, tableName: 'stock_code' });
 
 
