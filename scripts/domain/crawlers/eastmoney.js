@@ -93,4 +93,30 @@ EastMoney.prototype.parseReportContent = function (url) {
   return d.promise;
 };
 
+// TODO: asimov
+// def updateInfo(self, market, code):
+//     # code: 600016, market: sh
+//     # code: 000002, market: sz
+//     urlRoot = 'http://f10.eastmoney.com/f10_v2/'
+//     endpoint = '%sFinanceAnalysis.aspx?code=%s%06d' % (urlRoot, market, code)
+//     print "processing...", endpoint
+
+//     h = requests.get(endpoint)
+//     if h.status_code == 404:
+//         return {
+//             'code': code,
+//             'name': 'DELIST',
+//             'is_delist': 1
+//         }
+//     else:
+//         soup = BeautifulSoup(h.text)
+
+//         name = soup.find('p', { 'class' : 'key' }).findAll('a')[0].find(text=True).strip()
+//         is_delist = int(not soup.find('ul', { 'id': 'ZYZBTab' }))
+//         return {
+//             'code': code,
+//             'name': name,
+//             'is_delist': is_delist
+//         }
+
 module.exports = EastMoney;
