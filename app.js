@@ -7,7 +7,7 @@ nconf
   .env()
   .file({ file: 'settings.json' });
 
-nconf.set('is_local', [ 'VirtualU', 'vDebian' ].indexOf(os.hostname()) > -1);
+nconf.set('is_local', [ 'ALBERTATMP', 'vDebian' ].indexOf(os.hostname()) > -1);
 // ######## CONFIG END ########
 
 var express = require('express');

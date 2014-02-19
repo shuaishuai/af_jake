@@ -11,6 +11,8 @@ Me.prototype.get = function (url, options) {
     if (!error) {
       if (response.statusCode === 404) {
         d.reject('404');
+      } else if (response.statusCode === 503) {
+        d.reject('timeout'); // FIXME: server is overload or server hates you
       } else if (response.statusCode === 200) {
         d.resolve(body);
       } else {
@@ -22,6 +24,7 @@ Me.prototype.get = function (url, options) {
       if (common.isTimeout(error)) {
         d.reject('timeout');
       } else {
+        console.log(error.code);
         d.reject(error);
       }
     }
