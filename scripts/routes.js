@@ -30,6 +30,7 @@ function init(app) {
 
   // download
   app.get("/download/price.csv/:begin/:end", download.price_csv);
+  app.get("/download/latest_10_updated_doctors.csv", download.doctor_csv);
 }
 
 exports.init = init;

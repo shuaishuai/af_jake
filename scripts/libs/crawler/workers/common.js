@@ -10,6 +10,7 @@
 module.exports = {
   isTimeout: function(error) {
     return error.code === 'ETIMEDOUT' ||
-           error.code === 'ESOCKETTIMEDOUT';
+           error.code === 'ESOCKETTIMEDOUT' ||
+           error.code === 'ECONNRESET';
   }
 };

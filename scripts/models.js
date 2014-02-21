@@ -101,10 +101,30 @@ var CronTab = sequelize.define('CronTab', {
   active: Sequelize.INTEGER,
   uuid: Sequelize.STRING(63),
   name: Sequelize.STRING(63),
-  interval: Sequelize.INTEGER, // FIXME: 'key' is a MySQL reserved keyword
+  interval: Sequelize.INTEGER,
   delay: Sequelize.INTEGER,
   last_attempt: Sequelize.BIGINT, // Date.now(), utc timestamp
 }, { timestamps: false, tableName: 'cron_tab' });
+
+var Doctor = sequelize.define('Doctor', {
+  id: Sequelize.INTEGER,
+  updated: Sequelize.DATE,
+  is_parsed: Sequelize.INTEGER,
+  profile_url: Sequelize.STRING(255),
+  contact_url: Sequelize.STRING(255),
+  hospitals: Sequelize.STRING(255),
+  firstname: { type: Sequelize.STRING(63), defaultValue: 'EMPTY' },
+  lastname: Sequelize.STRING(63),
+  credentials: Sequelize.STRING(15),
+  address: Sequelize.STRING(255),
+  address2: Sequelize.STRING(255),
+  city: Sequelize.STRING(31),
+  state: Sequelize.STRING(31),
+  zip: Sequelize.STRING(15),
+  phone: Sequelize.STRING(31),
+  fax: Sequelize.STRING(31),
+}, { timestamps: false, tableName: 'doctor' });
+
 
 module.exports = {
   raw_conn: function () {
@@ -117,4 +137,5 @@ module.exports = {
   StockCode: StockCode,
   Price: Price,
   CronTab: CronTab,
+  Doctor: Doctor,
 };

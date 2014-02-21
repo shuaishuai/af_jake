@@ -3,7 +3,7 @@ var _ = require('lodash'),
     moment = require('moment');
 
 var models = require('../models'),
-    Price = models.Price;
+    Doctor = models.Doctor;
 
 function price_csv (req, res) {
   var begin = moment(req.param('begin'));
@@ -43,6 +43,36 @@ function price_csv (req, res) {
   }
 }
 
+function doctor_csv (req, res) {
+  var query = {
+    where: {
+      is_parsed: 1,
+    },
+    order: 'updated DESC',
+    limit: 10,
+  };
+
+  Doctor
+    .findAll(query)
+    .success(function (doctor_list) {
+      if (doctor_list) {
+        var columns = [ 'hospitals', 'firstname', 'lastname', 'credentials',
+                        'address', 'city', 'state', 'zip', 'phone', 'fax' ];
+        var data = _.map(doctor_list, function (d) {
+          return _.pick(d, columns);
+        });
+
+        var filename = 'latest_10_updated_doctors.csv';
+        res.attachment(filename);
+        csv().from(data, { columns: columns })
+             .to(res, { header: true, delimiter: "|" });
+      } else {
+        res.send('error');
+      }
+    });
+}
+
 module.exports = {
   price_csv: price_csv,
+  doctor_csv: doctor_csv,
 };

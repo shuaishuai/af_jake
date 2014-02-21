@@ -19,7 +19,7 @@ module.exports = {
         if (kv) {
           d.resolve(JSON.parse(kv.value));
         } else {
-          d.reject('not found');
+          d.reject('kv not found');
         }
       });
 
@@ -39,6 +39,7 @@ module.exports = {
       .success(function (kv) {
         if (kv) {
           kv.value = JSON.stringify(value);
+          kv.updated = new Date();
           kv.save()
             .success(function () {
               if (promiseResult) {

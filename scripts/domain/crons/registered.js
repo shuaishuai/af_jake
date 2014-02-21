@@ -3,6 +3,7 @@ module.exports = {
   'de032d98-7f3f-11e3-b0be-08002708e90e': './task_parttime_wuba1_list',
   '450cb9d4-8fa6-11e3-a1d0-08002708e90e': './task_parttime_wuba2_list',
   'c88e92cf-87c9-11e3-b866-bc5ff444b3d5': './task_parttime_baixing_list',
+  '1ed4b4cc-9ab6-11e3-8a39-bc5ff444b3d5': './task_parttime_elance_list',
   'd3cad59c-81a6-11e3-968b-08002708e90e': './task_parttime_content',
 
   '142c02ea-6ea2-11e3-b6f8-08002708e90e': './task_report_eastmoney_list',
@@ -11,4 +12,7 @@ module.exports = {
   '8bb56b1a-833f-11e3-9b8a-08002708e90e': './task_remove_duplicate',
 
   '3d256512-9330-11e3-a6f7-0800272bd08d': './task_stock_score',
+
+  '380c0ea6-a01d-11e3-aec7-bc5ff444b3d5': './temp_usnews_list',
+  '97fa1ce6-a021-11e3-84a7-bc5ff444b3d5': './temp_usnews_content',
 };
