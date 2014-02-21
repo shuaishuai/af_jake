@@ -50,10 +50,12 @@ Wuba.prototype.parseList = function (last_items) {
       for (var i = 0; i < $dlList.length; i++) {
         $dl = $dlList.eq(i);
         href = $dl.find('dt a').attr('href');
-        all_items.push({
-          source: 'wuba',
-          url: href,
-        });
+        if (href.indexOf('jing.58.com') === -1) {
+          all_items.push({
+            source: 'wuba',
+            url: href,
+          });
+        }
       }
 
       return Crawler.filterNewItems(all_items, last_items, 'url');
