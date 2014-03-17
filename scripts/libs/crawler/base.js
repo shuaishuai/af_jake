@@ -55,5 +55,13 @@ Crawler.filterNewItems = function (all_items, last_items, prop) {
   return d.promise;
 };
 
+// if you want to filter out some indifferent items,
+//   override this in your own crawler
+Crawler.prototype.filters = function (all_items) {
+  var d = q.defer();
+  d.resolve(all_items);
+  return d.promise;
+}
+
 
 module.exports = Crawler;

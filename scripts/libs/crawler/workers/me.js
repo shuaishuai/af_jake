@@ -16,9 +16,7 @@ Me.prototype.get = function (url, options) {
       } else if (response.statusCode === 200) {
         d.resolve(body);
       } else {
-        console.log(url);
-        console.log(response.statusCode);
-        d.reject('WTF');
+        d.reject(response.statusCode + ', ' + url);
       }
     } else {
       if (common.isTimeout(error)) {

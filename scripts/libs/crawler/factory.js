@@ -23,6 +23,9 @@ CrawlerFactory.prototype.parseList = function (last_items_key, crawler, Model, t
       return KV.set(last_items_key, last_items, items);
     })
     .then(function (items) {
+      return crawler.filters(items);
+    })
+    .then(function (items) {
       return Model.bulkCreate(items);
     })
     .then(function (items) {

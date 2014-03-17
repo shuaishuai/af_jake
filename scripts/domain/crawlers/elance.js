@@ -1,6 +1,6 @@
 var q = require('q');
 var $ = require('cheerio');
-// var moment = require('moment');
+var _ = require('lodash');
 
 var Crawler = require('../../libs/crawler').Crawler;
 
@@ -49,5 +49,21 @@ Elance.prototype.parseList = function (last_items) {
       return Crawler.filterNewItems(all_items, last_items, 'url');
     });
 };
+
+Elance.prototype.filters = function (all_items) {
+  var d = q.defer();
+
+  var keywords = /symfony|joomla|drupal|(big|os|woo)commerce|magento|(open|zen)cart|shopify|sharepoint|(seo | seo)|wordpress|ios|php|game|video|(java | java)/i;
+  var filtered = _.filter(all_items, function (item) {
+    return !keywords.test(item.title);
+  });
+
+  // console.log(all_items.length);
+  // console.log(filtered.length);
+
+  d.resolve(filtered);
+
+  return d.promise;
+}
 
 module.exports = Elance;
