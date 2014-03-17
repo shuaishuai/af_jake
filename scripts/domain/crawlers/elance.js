@@ -53,7 +53,7 @@ Elance.prototype.parseList = function (last_items) {
 Elance.prototype.filters = function (all_items) {
   var d = q.defer();
 
-  var keywords = /symfony|joomla|drupal|(big|os|woo)commerce|magento|(open|zen)cart|shopify|sharepoint|(seo | seo)|wordpress|ios|php|game|video|(java | java)/i;
+  var keywords = /joomla|bigcommerce|magento|opencart|zencart|oscommerce|shopify|sharepoint|(seo | seo)|wordpress/i;
   var filtered = _.filter(all_items, function (item) {
     return !keywords.test(item.title);
   });
