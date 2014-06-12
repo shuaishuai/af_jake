@@ -2,7 +2,8 @@ var basic = require('./views/basic'),
     api = require('./views/api'),
     cron = require('./views/cron'),
     feed = require('./views/feed'),
-    download = require('./views/download');
+    download = require('./views/download'),
+    judian = require('./views/judian');
 
 var _headers = require('./views/_headers'),
     never_cache = _headers.never_cache;
@@ -31,6 +32,10 @@ function init(app) {
   // download
   app.get("/download/price.csv/:begin/:end", download.price_csv);
   app.get("/download/latest_10_updated_doctors.csv", download.doctor_csv);
+
+  // judian
+  app.get("/judian", judian.index);
+  app.get("/oauth/teambition", judian.login);
 }
 
 exports.init = init;
