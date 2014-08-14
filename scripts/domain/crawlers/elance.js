@@ -53,13 +53,18 @@ Elance.prototype.parseList = function (last_items) {
 Elance.prototype.filters = function (all_items) {
   var d = q.defer();
 
-  var keywords = /symfony|joomla|bigcommerce|magento|opencart|zencart|oscommerce|shopify|sharepoint|(seo | seo)|wordpress/i;
+  var keywords = [ '(open|zen)cart',
+                   '(os|big)commerce',
+                   'symfony', 'joomla', 'magento', 'shopify', 'sharepoint', 'wordpress',
+                   '(seo | seo)',
+                   '(java | java)',
+                   '(php | php)',
+                   '(ios | ios)',
+                   'android'].join('|');
+  var reg = new RegExp('/' + keywords + '/', 'i');
   var filtered = _.filter(all_items, function (item) {
-    return !keywords.test(item.title);
+    return !reg.test(item.title);
   });
-
-  // console.log(all_items.length);
-  // console.log(filtered.length);
 
   d.resolve(filtered);
 

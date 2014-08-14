@@ -13,17 +13,17 @@ nconf.set('is_local', [ 'ALBERTATMP', 'vDebian' ].indexOf(os.hostname()) > -1);
 var express = require('express');
 var app = express();
 
-// // ** to use dustjs-linkedin
-// // https://github.com/chovy/express-template-demo/blob/master/demo/app.js
-// var dust = require('dustjs-linkedin'),
-//     cons = require('consolidate');
+// ** to use dustjs-linkedin
+// https://github.com/chovy/express-template-demo/blob/master/demo/app.js
+var dust = require('dustjs-linkedin'),
+    cons = require('consolidate');
 
-// var dustHelpers = require('./scripts/domain/dust.helpers');
-// dustHelpers.init(dust.helpers);
+var dustHelpers = require('./scripts/domain/dust.helpers');
+dustHelpers.init(dust.helpers);
 
-// app.engine('dust', cons.dust);
-// app.set('view engine', 'dust');
-// app.set('views', __dirname + '/templates');
+app.engine('dust', cons.dust);
+app.set('view engine', 'dust');
+app.set('views', __dirname + '/templates');
 
 // static folder
 app.use(express.static(__dirname + '/public'));

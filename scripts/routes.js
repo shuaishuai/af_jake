@@ -20,6 +20,7 @@ function init(app) {
   // api
   app.get("/api/stockcode/info/:code", api.stockcode_info);
   app.get('/api/stockcode/filter', api.stockcode_filter);
+  app.get('/api/crons', api.list_cron);
 
   // cron
   // app.get("/cron/price/au", never_cache, cron.price_au);
@@ -28,6 +29,8 @@ function init(app) {
 
   // atom
   app.get("/feed/reports", feed.reports);
+  app.get("/feed/parttimes/zh", feed.parttimes_zh);
+  app.get("/feed/parttimes/en", feed.parttimes_en);
 
   // download
   app.get("/download/price.csv/:begin/:end", download.price_csv);

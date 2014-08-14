@@ -3,8 +3,7 @@ var q = require('q'),
     $ = require('cheerio'),
     moment = require('moment');
 
-var iconv = require('iconv'),
-    ic_gb2312_to_utf8 = new iconv.Iconv('gb2312', 'utf-8//IGNORE');
+var iconv = require('iconv-lite');
 
 var Crawler = require('../../libs/crawler').Crawler;
 
@@ -24,8 +23,7 @@ EastMoney.prototype.parseList = function (last_items) {
         var d = q.defer();
 
         // FIXME: try/catch
-        var buf = ic_gb2312_to_utf8.convert(body);
-        var html = buf.toString('utf-8');
+        var html = iconv.decode(body, 'gb2312');
 
         // ** their typo
         html = html.replace(/<\/a><\/td><\/div>/g, "</a></div></td>");
@@ -59,8 +57,7 @@ EastMoney.prototype.parseReportContent = function (url) {
       .then(function (body) {
         var html;
         try {
-          var buf = ic_gb2312_to_utf8.convert(body);
-          html = buf.toString('utf-8');
+          html = iconv.decode(body, 'gb2312');
         } catch (e) {
           d.reject(new Error('error converting'));
         }

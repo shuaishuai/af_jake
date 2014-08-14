@@ -1,5 +1,6 @@
 var q = require('q');
 var $ = require('cheerio');
+var _ = require('lodash');
 var moment = require('moment');
 
 var Crawler = require('../../libs/crawler').Crawler;
@@ -17,14 +18,14 @@ Baixing.prototype.parseList = function (last_items) {
     .get(url, { encoding: 'utf-8'})
     .then(function (body) {
       var $html = $(body);
-      var $list = $html.find('#normal-list ul li');
+      var $list = $html.find('#all-list .table-view-item > div');
 
       var all_items = [];
       var $li;
       var href;
       for (var i = 0; i < $list.length; i++) {
         $li = $list.eq(i);
-        href = $li.find('a').attr('href');
+        href = $li.find('a').eq(0).attr('href');
         all_items.push({
           source: 'baixing',
           url: href,
@@ -64,5 +65,19 @@ Baixing.prototype.parseJobContent = function (url) {
 
   return d.promise;
 };
+
+Baixing.prototype.filters = function (all_items) {
+  var d = q.defer();
+
+  var keywords = [ '日结', '日薪', '日赚', '现结' ].join('|');
+  var reg = new RegExp('/' + keywords + '/', 'i');
+  var filtered = _.filter(all_items, function (item) {
+    return !reg.test(item.title);
+  });
+
+  d.resolve(filtered);
+
+  return d.promise;
+}
 
 module.exports = Baixing;

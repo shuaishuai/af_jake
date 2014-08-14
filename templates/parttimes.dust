@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Reports</title>
+  <title>Parttimes</title>
   <subtitle>The Newest 50 entries</subtitle>
   <link rel="self" href="http://jake.eu01.aws.af.cm"/>
   <id>http://jake.eu01.aws.af.cm</id>
@@ -9,16 +9,16 @@
     <name>http://shuaishuai.github.io</name>
     <email>shuaizhexu@gmail.com</email>
   </author>
- <category term="stock"/>
- {#reports}
+ <category term="parttime"/>
+ {#parttimes}
  <entry>
-  <title>{@code_formater code=code}{/code_formater}, {name}, {title}</title>
+  <title>[{source}] {title}</title>
   <link rel="alternate" href="{url}"/>
   <id>{url}</id>
   <updated>{created}</updated>
   <content>{content}</content>
-  <category term="stock"/>
+  <category term="parttime"/>
   <category term="atom"/>
  </entry>
- {/reports}
+ {/parttimes}
 </feed>

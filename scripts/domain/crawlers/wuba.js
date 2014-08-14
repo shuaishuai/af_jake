@@ -1,5 +1,6 @@
 var q = require('q');
 var $ = require('cheerio');
+var _ = require('lodash');
 
 var Crawler = require('../../libs/crawler').Crawler;
 
@@ -61,5 +62,19 @@ Wuba.prototype.parseList = function (last_items) {
       return Crawler.filterNewItems(all_items, last_items, 'url');
     });
 };
+
+Wuba.prototype.filters = function (all_items) {
+  var d = q.defer();
+
+  var keywords = [ '日结', '日薪', '日赚', '现结' ].join('|');
+  var reg = new RegExp('/' + keywords + '/', 'i');
+  var filtered = _.filter(all_items, function (item) {
+    return !reg.test(item.title);
+  });
+
+  d.resolve(filtered);
+
+  return d.promise;
+}
 
 module.exports = Wuba;
