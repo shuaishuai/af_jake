@@ -22,15 +22,14 @@ Ganji.prototype.parseList = function (last_items) {
       var $dlList = $html.find('.job-list');
 
       var all_items = [];
-      var $dl, href;
+      var $a;
       for (var i = 0; i < $dlList.length; i++) {
-        $dl = $dlList.eq(i);
-
-        href = host + $dl.find('dt a').attr('href');
+        $a = $dlList.eq(i).find('dt a');
 
         all_items.push({
           source: 'ganji',
-          url: href,
+          title: $a.text().trim(),
+          url: host + $a.attr('href'),
         });
       }
 
@@ -70,7 +69,7 @@ Ganji.prototype.filters = function (all_items) {
   var d = q.defer();
 
   var keywords = [ '日结', '日薪', '日赚', '现结' ].join('|');
-  var reg = new RegExp('/' + keywords + '/', 'i');
+  var reg = new RegExp(keywords, 'i');
   var filtered = _.filter(all_items, function (item) {
     return !reg.test(item.title);
   });

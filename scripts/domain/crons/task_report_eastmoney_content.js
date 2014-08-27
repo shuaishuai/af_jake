@@ -36,7 +36,7 @@ ReportContent.prototype.do = function () {
           .fail(function (error) {
             if (typeof error === 'string') {
               if (error === '404') {
-                pt.destroy().success(function () {
+                report.destroy().success(function () {
                   that.emit('error', error);
                 });
               } else {

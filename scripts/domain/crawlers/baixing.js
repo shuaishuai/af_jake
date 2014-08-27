@@ -44,12 +44,13 @@ Baixing.prototype.parseJobContent = function (url) {
         var html = body.toString();
 
         var $html = $(html);
-        // var errText = $html.find(".errText");
         var $title = $html.find('.viewad-title');
-        var $content = $html.find('.viewad-descript').next();
-        var $meta = $html.find('.viewad-meta');
+        $title.find('script').remove();
 
-        var created = $meta.find('.action').next().text().trim();
+        var $actions = $html.find('.viewad-actions');
+        var $content = $html.find('#posts');
+
+        var created = $actions.find('.action').next().text().trim();
 
         d.resolve({
           source: 'baixing',
@@ -70,7 +71,7 @@ Baixing.prototype.filters = function (all_items) {
   var d = q.defer();
 
   var keywords = [ '日结', '日薪', '日赚', '现结' ].join('|');
-  var reg = new RegExp('/' + keywords + '/', 'i');
+  var reg = new RegExp(keywords, 'i');
   var filtered = _.filter(all_items, function (item) {
     return !reg.test(item.title);
   });

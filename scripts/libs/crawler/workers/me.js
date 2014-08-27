@@ -2,7 +2,11 @@ var q = require('q');
 var request = require('request');
 var common = require('./common');
 
+
+
+
 var Me = function () {};
+
 
 Me.prototype.get = function (url, options) {
   var d = q.defer();
@@ -11,7 +15,7 @@ Me.prototype.get = function (url, options) {
     if (!error) {
       if (response.statusCode === 404) {
         d.reject('404');
-      } else if (response.statusCode === 503) {
+      } else if (response.statusCode === 503 || response.statusCode === 502) {
         d.reject('timeout'); // FIXME: server is overload or server hates you
       } else if (response.statusCode === 200) {
         d.resolve(body);
@@ -21,9 +25,10 @@ Me.prototype.get = function (url, options) {
     } else {
       if (common.isTimeout(error)) {
         d.reject('timeout');
+      } else if (common.isInvalidURI(error)) {
+        d.reject('404')
       } else {
-        console.log(error.code);
-        d.reject(error);
+        d.reject(error.toString() + ', ' + url);
       }
     }
   });

@@ -67,7 +67,7 @@ Wuba.prototype.filters = function (all_items) {
   var d = q.defer();
 
   var keywords = [ '日结', '日薪', '日赚', '现结' ].join('|');
-  var reg = new RegExp('/' + keywords + '/', 'i');
+  var reg = new RegExp(keywords, 'i');
   var filtered = _.filter(all_items, function (item) {
     return !reg.test(item.title);
   });

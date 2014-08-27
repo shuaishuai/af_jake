@@ -32,11 +32,9 @@ Crawler.filterNewItems = function (all_items, last_items, prop) {
   for (var i = 0; i < all_items.length; i++) {
     item = all_items[i];
 
-    if (last_items.indexOf(item[prop]) > -1) {
-      break;
+    if (last_items.indexOf(item[prop]) === -1) {
+      items.push(item);
     }
-
-    items.push(item);
   }
 
   var new_last_items = _.map(all_items, function (item) {

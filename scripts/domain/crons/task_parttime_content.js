@@ -39,7 +39,7 @@ task.do = function () {
             if (typeof error === 'string') {
               if (error === '404') {
                 pt.destroy().success(function () {
-                  that.emit('error', error);
+                  that.emit('error', error + ', ' + pt.url);
                 });
               } else {
                 that.emit('error', error);

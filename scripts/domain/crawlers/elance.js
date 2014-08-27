@@ -61,7 +61,7 @@ Elance.prototype.filters = function (all_items) {
                    '(php | php)',
                    '(ios | ios)',
                    'android'].join('|');
-  var reg = new RegExp('/' + keywords + '/', 'i');
+  var reg = new RegExp(keywords, 'i');
   var filtered = _.filter(all_items, function (item) {
     return !reg.test(item.title);
   });
