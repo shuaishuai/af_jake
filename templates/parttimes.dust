@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Parttimes</title>
+  <subtitle>The Newest 50 entries</subtitle>
+  <link rel="self" href="http://jake.eu01.aws.af.cm"/>
+  <id>http://jake.eu01.aws.af.cm</id>
+  <updated>{updated}</updated>
+  <author>
+    <name>http://shuaishuai.github.io</name>
+    <email>shuaizhexu@gmail.com</email>
+  </author>
+ <category term="parttime"/>
+ {#parttimes}
+ <entry>
+  <title>[{source}] {title}</title>
+  <link rel="alternate" href="{url}"/>
+  <id>{url}</id>
+  <updated>{created}</updated>
+  <content>{content}</content>
+  <category term="parttime"/>
+  <category term="atom"/>
+ </entry>
+ {/parttimes}
+</feed>
